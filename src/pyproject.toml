@@ -1,0 +1,17 @@
+[project]
+name = "graphc"
+version = "0.1.0"
+description = "a console for querying graph databases"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.39.14",
+    "neo4j>=5.28.1",
+    "pandas>=2.3.1",
+    "rich>=14.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.5",
+    "ty>=0.0.1a16",
+]

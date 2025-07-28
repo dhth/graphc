@@ -1,0 +1,78 @@
+name: pr
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+      workflows: ${{ steps.filter.outputs.workflows }}
+      yml: ${{ steps.filter.outputs.yml }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            code:
+              - "src/**"
+              - ".github/workflows/main.yml"
+            workflows:
+              - ".github/**/*.yml"
+            yml:
+              - "**.yml"
+              - "**.yaml"
+
+  lint:
+    needs: changes
+    if: ${{ needs.changes.outputs.code == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      SQLX_OFFLINE: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Lint
+        run: |
+          uv run ruff format --check .
+          uv run ruff check .
+          uv run ty check .
+
+  build:
+    needs: changes
+    if: ${{ needs.changes.outputs.code == 'true' }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Lint
+        run: |
+          uv build
+
+  lint-workflows:
+    needs: changes
+    if: ${{ needs.changes.outputs.workflows == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: dhth/composite-actions/.github/actions/lint-actions@main
+
+  lint-yaml:
+    needs: changes
+    if: ${{ needs.changes.outputs.yml == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: dhth/composite-actions/.github/actions/lint-yaml@main
