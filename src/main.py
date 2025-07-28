@@ -16,13 +16,11 @@ def run_loop(driver: Driver):
         "quit",
     ]
     print(r"""[blue]
-   __    __  _
- /'_ `\ /\ \/'\
-/\ \L\ \\/>  </
-\ \____ \/\_/\_\
- \/___L\ \//\/_/
-   /\____/
-   \_/__/
+                     _    ___ 
+  __ _ _ _ __ _ _ __| |_ / __|
+ / _` | '_/ _` | '_ \ ' \ (__ 
+ \__, |_| \__,_| .__/_||_\___|
+ |___/         |_|
 [/blue]""")
     server_info = driver.get_server_info()
     print(f"[blue]connected to {server_info.address}[/blue]")
