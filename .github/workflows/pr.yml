@@ -38,7 +38,6 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - name: Lint
         run: |
-          cd src
           uv run ruff format --check .
           uv run ruff check .
           uv run ty check .
@@ -53,9 +52,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - name: Lint
+      - name: Build
         run: |
-          cd src
           uv build
 
   lint-workflows:

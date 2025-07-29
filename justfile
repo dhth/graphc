@@ -1,4 +1,3 @@
-set working-directory := 'src'
 set dotenv-load
 
 alias f := format
@@ -25,4 +24,4 @@ query query *FLAGS:
     uv run main.py --query '{{query}}' {{FLAGS}}
 
 run *FLAGS:
-    uv run main.py {{FLAGS}}
+    uv run src/main.py {{FLAGS}}
