@@ -1,15 +1,14 @@
 from neo4j import GraphDatabase, Driver
 import os
 from boto3 import Session
-from utils.auth import NeptuneAuthToken
-from domain.servicekind import NeptuneServiceKind
+from domain import NeptuneAuth, NeptuneServiceKind
 
 
 def get_db_driver(db_uri: str) -> Driver:
     if "neptune.amazonaws.com" in db_uri:
         session = Session()
         region = os.environ.get("AWS_REGION", "us-east-1")
-        auth_token = NeptuneAuthToken(
+        auth_token = NeptuneAuth(
             credentials=session.get_credentials(),
             region=region,
             url=db_uri,

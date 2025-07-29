@@ -5,10 +5,10 @@ from neo4j import Auth
 from botocore.awsrequest import AWSRequest
 from botocore.auth import SigV4Auth
 from botocore.credentials import Credentials
-from domain.servicekind import NeptuneServiceKind
+from domain import NeptuneServiceKind
 
 
-class NeptuneAuthToken(Auth):
+class NeptuneAuth(Auth):
     def __init__(
         self,
         credentials: Credentials,
