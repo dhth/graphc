@@ -7,10 +7,10 @@ alias q := query
 alias r := run
 
 format *FLAGS:
-    ruff format . {{FLAGS}}
+    uv run ruff format . {{FLAGS}}
 
-ruff *FLAGS:
-    uv run ruff check . {{FLAGS}}
+ruff:
+    uv run ruff check . --fix
 
 ty *FLAGS:
     uv run ty check . {{FLAGS}}

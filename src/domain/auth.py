@@ -1,11 +1,12 @@
 import json
 from urllib.parse import urlparse
 
-from neo4j import Auth
-from botocore.awsrequest import AWSRequest
 from botocore.auth import SigV4Auth
+from botocore.awsrequest import AWSRequest
 from botocore.credentials import Credentials
-from domain import NeptuneServiceKind
+from neo4j import Auth
+
+from .servicekind import NeptuneServiceKind
 
 
 class NeptuneAuth(Auth):
