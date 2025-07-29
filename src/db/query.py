@@ -3,8 +3,11 @@ from neo4j import Driver
 from rich import print
 
 
-def query_and_print_result(driver: Driver, query: str):
+def query_and_print_result(driver: Driver, query: str, *, print_query: bool = False):
     result = query_db(driver, query)
+    if print_query:
+        print(f"[green]---\n{query}\n---[/green]")
+
     if result.empty:
         print("[grey66]no data found[/grey66]")
     else:
