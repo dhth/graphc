@@ -9,19 +9,19 @@ HELP_CMDS = ["help", ":h"]
 
 
 def run_loop(driver: Driver, db_uri: str):
-    _print_banner()
-    _print_help(db_uri)
-    _loop(driver, db_uri)
+    print_banner()
+    print_help(db_uri)
+    loop(driver, db_uri)
 
 
-def _loop(driver: Driver, db_uri: str):
+def loop(driver: Driver, db_uri: str):
     while True:
         user_input = input(">> ").strip()
         if user_input in QUIT_CMDS:
             return
 
         if user_input in HELP_CMDS:
-            _print_help(db_uri)
+            print_help(db_uri)
             continue
 
         if user_input in CLEAR_CMDS:
@@ -36,7 +36,7 @@ def _loop(driver: Driver, db_uri: str):
         print()
 
 
-def _print_banner():
+def print_banner():
     print(r"""[blue]
                      _    ___ 
   __ _ _ _ __ _ _ __| |_ / __|
@@ -46,7 +46,7 @@ def _print_banner():
 [/blue]""")
 
 
-def _print_help(db_uri: str):
+def print_help(db_uri: str):
     print(f"[blue]connected to {db_uri}[/blue]")
     print()
     print("[yellow]commands[/yellow]")
