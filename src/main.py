@@ -17,7 +17,7 @@ ISSUES_URL = "https://github.com/dhth/graphc/issues"
 def main():
     args = parse_args()
 
-    db_uri = get_db_uri()
+    db_uri = get_db_uri(args.db_uri)
     driver = get_db_driver(db_uri)
     driver.verify_connectivity()
 
@@ -29,14 +29,17 @@ def main():
         run_loop(driver, db_uri, history_file_path)
 
 
-def get_db_uri() -> str:
-    db_uri = os.environ.get("DB_URI")
+def get_db_uri(db_uri_from_flag: str | None) -> str:
+    db_uri = db_uri_from_flag or os.environ.get("DB_URI")
+
     if db_uri is None:
-        raise ValueError("DB_URI is not set")
+        raise ValueError(
+            "database URI not provided; either provide --db-uri/-d or set DB_URI"
+        )
 
     db_uri = db_uri.strip()
     if db_uri == "":
-        raise ValueError("DB_URI is empty")
+        raise ValueError("database URI is empty")
 
     return db_uri
 

@@ -14,7 +14,7 @@ class NeptuneAuth(Auth):
         self,
         credentials: Credentials,
         region: str,
-        url: str,
+        uri: str,
         service: NeptuneServiceKind,
         **parameters,
     ):
@@ -22,7 +22,7 @@ class NeptuneAuth(Auth):
             "neptune-db" if service == NeptuneServiceKind.DB else "neptune-graph"
         )
 
-        request = AWSRequest(method="GET", url=f"{url}/opencypher")
+        request = AWSRequest(method="GET", url=f"{uri}/opencypher")
 
         parsed_url = urlparse(request.url)
         host = str(parsed_url.netloc) if parsed_url.netloc else ""
