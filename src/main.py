@@ -1,11 +1,17 @@
 import os
 import sys
+from pathlib import Path
 
 from rich import print
 
+import errors
 from cli import parse_args
 from console import run_loop
 from db import get_db_driver, query_and_print_result
+from utils import get_data_dir
+
+AUTHOR = "@dhth"
+ISSUES_URL = "https://github.com/dhth/graphc/issues"
 
 
 def main():
@@ -18,7 +24,9 @@ def main():
     if args.query:
         query_and_print_result(driver, args.query)
     else:
-        run_loop(driver, db_uri)
+        user_data_dir = get_data_dir()
+        history_file_path = Path(user_data_dir) / "history.txt"
+        run_loop(driver, db_uri, history_file_path)
 
 
 def get_db_uri() -> str:
@@ -36,5 +44,16 @@ def get_db_uri() -> str:
 if __name__ == "__main__":
     try:
         main()
+    except KeyboardInterrupt:
+        sys.exit(1)
+    except errors.UserDataDirError as e:
+        print(f"[red]Error[/red]: {e}", file=sys.stderr)
+        print("---")
+        print(
+            f"This isn't supposed to happen; let {AUTHOR} know via {ISSUES_URL}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
     except Exception as e:
         print(f"[red]Error[/red]: {e}", file=sys.stderr)
+        sys.exit(1)
