@@ -1,41 +1,23 @@
 import os
+from pathlib import Path
+from typing import List
 
 from neo4j import Driver
+from prompt_toolkit import prompt
+from prompt_toolkit.history import FileHistory
 from rich import print
 
 from db import query_and_print_result
 
 CLEAR_CMDS = ["clear"]
-QUIT_CMDS = ["bye", "exit", "quit", ":q"]
 HELP_CMDS = ["help", ":h"]
+QUIT_CMDS = ["bye", "exit", "quit", ":q"]
 
 
-def run_loop(driver: Driver, db_uri: str):
+def run_loop(driver: Driver, db_uri: str, history_file_path: Path):
     print_banner()
     print_help(db_uri)
-    loop(driver, db_uri)
-
-
-def loop(driver: Driver, db_uri: str):
-    while True:
-        user_input = input(">> ").strip()
-        if user_input in QUIT_CMDS:
-            return
-
-        if user_input in HELP_CMDS:
-            print_help(db_uri)
-            continue
-
-        if user_input in CLEAR_CMDS:
-            clear_screen()
-            continue
-
-        try:
-            query_and_print_result(driver, user_input)
-        except Exception as e:
-            print(f"[red]Error[/red]: {e}")
-
-        print()
+    loop(driver, db_uri, history_file_path)
 
 
 def print_banner():
@@ -52,10 +34,63 @@ def print_help(db_uri: str):
     print(f"[blue]connected to {db_uri}[/blue]")
     print()
     print("[yellow]commands[/yellow]")
-    print(f"[yellow]  - '{'/'.join(HELP_CMDS)}' to show help[/yellow]")
-    print(f"[yellow]  - '{'/'.join(CLEAR_CMDS)}' to clear screen[/yellow]")
-    print(f"[yellow]  - '{'/'.join(QUIT_CMDS)}' to quit[/yellow]")
+    print(f"[yellow]  '{'/'.join(HELP_CMDS)}' to show help[/yellow]")
+    print(f"[yellow]  '{'/'.join(CLEAR_CMDS)}' to clear screen[/yellow]")
+    print(f"[yellow]  '{'/'.join(QUIT_CMDS)}' to quit[/yellow]")
     print()
+    print("[green]keymaps[/green]")
+    print(f"[green]  '<esc>' to enter vim mode[/green]")
+    print(f"[green]  '↑' to scroll up[/green]")
+    print(f"[green]  'k' to scroll up (in vim mode)[/green]")
+    print(f"[green]  '↓' to scroll down[/green]")
+    print(f"[green]  'j' to scroll down (in vim mode)[/green]")
+    print()
+
+
+class QueryFileHistory(FileHistory):
+    def set_commands(self, commands: List[str]) -> None:
+        self.cmds = commands
+
+    def append_string(self, string: str) -> None:
+        if string in self.cmds:
+            return
+
+        super().append_string(string)
+
+
+def loop(driver: Driver, db_uri: str, history_file_path: Path):
+    history = QueryFileHistory(history_file_path)
+    history.set_commands(HELP_CMDS + CLEAR_CMDS + QUIT_CMDS)
+
+    while True:
+        user_input = prompt(
+            ">> ",
+            history=history,
+            vi_mode=True,
+            enable_history_search=True,
+        ).strip()
+
+        if user_input == "":
+            continue
+
+        if user_input in QUIT_CMDS:
+            print("bye 👋")
+            return
+
+        if user_input in HELP_CMDS:
+            print_help(db_uri)
+            continue
+
+        if user_input in CLEAR_CMDS:
+            clear_screen()
+            continue
+
+        try:
+            query_and_print_result(driver, user_input)
+        except Exception as e:
+            print(f"[red]Error[/red]: {e}")
+
+        print()
 
 
 def clear_screen():
