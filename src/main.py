@@ -1,9 +1,11 @@
 import os
 import sys
+
 from rich import print
+
 from cli import parse_args
-from db import query_and_print_result, get_db_driver
 from console import run_loop
+from db import get_db_driver, query_and_print_result
 
 
 def main():

@@ -1,7 +1,9 @@
 import os
+
 from neo4j import Driver
-from db import query_and_print_result
 from rich import print
+
+from db import query_and_print_result
 
 CLEAR_CMDS = ["clear"]
 QUIT_CMDS = ["bye", "exit", "quit", ":q"]
