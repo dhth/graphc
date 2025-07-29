@@ -5,7 +5,7 @@ from rich import print
 
 def query_and_print_result(driver: Driver, query: str):
     result = _query_db(driver, query)
-    if result.shape[0] == 0:
+    if result.empty:
         print("[grey66]no data found[/grey66]")
     else:
         print(result)

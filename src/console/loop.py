@@ -24,7 +24,7 @@ def _loop(driver: Driver, db_uri: str):
             _print_help(db_uri)
             continue
 
-        if user_input == "clear":
+        if user_input in CLEAR_CMDS:
             clear_screen()
             continue
 

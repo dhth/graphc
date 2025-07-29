@@ -24,8 +24,6 @@ def _get_db_uri() -> str:
     if db_uri is None:
         raise ValueError("DB_URI is not set")
 
-    db_uri = str(db_uri)
-
     db_uri = db_uri.strip()
     if db_uri == "":
         raise ValueError("DB_URI is empty")
