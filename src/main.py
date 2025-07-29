@@ -31,7 +31,7 @@ def main():
             run_loop(driver, db_uri, history_file_path)
     except KeyboardInterrupt:
         sys.exit(1)
-    except (errors.UserDataDirError, errors.CouldntReadStdin) as e:
+    except errors.UserDataDirError as e:
         print(f"[red]Error[/red]: {e}", file=sys.stderr)
         print("---")
         print(
@@ -65,7 +65,7 @@ def get_query(query_from_args: str) -> str:
             query = sys.stdin.read().strip()
             return query
         except Exception as e:
-            raise errors.CouldntReadStdin(f"couldn't read stdin: {e}") from e
+            raise RuntimeError(f"couldn't read query from stdin: {e}") from e
 
     return query_from_args
 
