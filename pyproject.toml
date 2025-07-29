@@ -18,5 +18,8 @@ dev = [
     "ty>=0.0.1a16",
 ]
 
+[project.scripts]
+graphc = "main:main"
+
 [tool.ruff]
 lint.select = ["I"]
