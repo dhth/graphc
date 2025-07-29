@@ -44,8 +44,8 @@ def get_db_uri() -> str:
 if __name__ == "__main__":
     try:
         main()
-    except (EOFError, KeyboardInterrupt):
-        pass
+    except KeyboardInterrupt:
+        print("bye 👋")
     except errors.UserDataDirError as e:
         print(f"[red]Error[/red]: {e}", file=sys.stderr)
         print("---")

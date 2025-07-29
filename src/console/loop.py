@@ -48,19 +48,21 @@ def print_help(db_uri: str):
 
 
 class QueryFileHistory(FileHistory):
-    def set_commands(self, commands: List[str]) -> None:
-        self.cmds = commands
+    def __init__(self, filename: Path, *, strings_to_ignore: List[str]) -> None:
+        super().__init__(filename)
+        self._strings_to_ignore = strings_to_ignore
 
     def append_string(self, string: str) -> None:
-        if string in self.cmds:
+        if string in self._strings_to_ignore:
             return
 
         super().append_string(string)
 
 
 def loop(driver: Driver, db_uri: str, history_file_path: Path):
-    history = QueryFileHistory(history_file_path)
-    history.set_commands(HELP_CMDS + CLEAR_CMDS + QUIT_CMDS)
+    history = QueryFileHistory(
+        history_file_path, strings_to_ignore=HELP_CMDS + CLEAR_CMDS + QUIT_CMDS
+    )
 
     while True:
         user_input = prompt(
