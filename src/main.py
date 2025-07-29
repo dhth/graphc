@@ -45,7 +45,7 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("bye 👋")
+        sys.exit(1)
     except errors.UserDataDirError as e:
         print(f"[red]Error[/red]: {e}", file=sys.stderr)
         print("---")
@@ -53,5 +53,7 @@ if __name__ == "__main__":
             f"This isn't supposed to happen; let {AUTHOR} know via {ISSUES_URL}",
             file=sys.stderr,
         )
+        sys.exit(1)
     except Exception as e:
         print(f"[red]Error[/red]: {e}", file=sys.stderr)
+        sys.exit(1)
