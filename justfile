@@ -5,6 +5,7 @@ alias t := ty
 alias l := lint
 alias q := query
 alias r := run
+alias i := install
 
 format *FLAGS:
     uv run ruff format . {{FLAGS}}
@@ -25,3 +26,6 @@ query query *FLAGS:
 
 run *FLAGS:
     uv run src/main.py {{FLAGS}}
+
+install:
+    uv tool install .

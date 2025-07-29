@@ -13,7 +13,7 @@ def get_db_driver(db_uri: str) -> Driver:
         auth = NeptuneAuth(
             credentials=session.get_credentials(),
             region=region,
-            url=db_uri,
+            uri=db_uri,
             service=NeptuneServiceKind.DB,
         )
 
