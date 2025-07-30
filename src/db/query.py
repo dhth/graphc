@@ -28,8 +28,17 @@ def query_db(driver: Driver, query: str) -> pd.DataFrame:
         return session.run(query).to_df()  # type: ignore[arg-type]
 
 
-def benchmark_query(driver: Driver, query: str, num_runs: int):
-    print(f"[yellow]Benchmarking query ({num_runs} runs)...\n[/]")
+def benchmark_query(driver: Driver, query: str, num_runs: int, warmup_runs: int):
+    if warmup_runs > 0:
+        print(f"[bold yellow]Warming up ({warmup_runs} runs) ...[/]")
+        for run in range(1, warmup_runs + 1):
+            start = time.perf_counter()
+            query_db(driver, query)
+            took_ms = (time.perf_counter() - start) * 1000
+            print(f"Warmup {run:2d}: {took_ms:8.2f} ms")
+        print()
+
+    print(f"[bold yellow]Benchmarking ({num_runs} runs) ...[/]")
 
     execution_times = []
 
@@ -42,7 +51,7 @@ def benchmark_query(driver: Driver, query: str, num_runs: int):
         print(f"Run {run:2d}: {took_ms:8.2f} ms")
 
     print(f"""
-[yellow]Statistics:[/]
+[bold yellow]Statistics:[/]
 Mean:   {statistics.mean(execution_times):8.2f} ms
 Median: {statistics.median(execution_times):8.2f} ms
 Min:    {min(execution_times):8.2f} ms

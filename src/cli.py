@@ -8,6 +8,7 @@ class Args:
     db_uri: str | None
     benchmark: bool
     bench_num_runs: int
+    bench_warmup_num_runs: int
 
 
 def parse_args() -> Args:
@@ -59,10 +60,20 @@ examples:
         help="Number of benchmark runs (default: 5)",
     )
 
+    parser.add_argument(
+        "-w",
+        "--bench-warmup-num-runs",
+        type=int,
+        default=0,
+        metavar="INTEGER",
+        help="Number of warmup runs before benchmarking (default: 0)",
+    )
+
     args = parser.parse_args()
     return Args(
         query=args.query,
         db_uri=args.db_uri,
         benchmark=args.benchmark,
         bench_num_runs=args.bench_num_runs,
+        bench_warmup_num_runs=args.bench_warmup_num_runs,
     )

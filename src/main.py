@@ -23,17 +23,21 @@ def main():
         driver.verify_connectivity()
 
         if args.query:
-            # Validate benchmark mode requirements
             if args.benchmark and not args.query:
                 raise ValueError("--benchmark requires --query to be specified")
 
             if args.benchmark and args.bench_num_runs < 1:
                 raise ValueError("--bench-num-runs must be at least 1")
 
+            if args.benchmark and args.bench_warmup_num_runs < 0:
+                raise ValueError("--bench-warmup-num-runs must be non-negative")
+
             query = get_query(args.query)
 
             if args.benchmark:
-                benchmark_query(driver, query, args.bench_num_runs)
+                benchmark_query(
+                    driver, query, args.bench_num_runs, args.bench_warmup_num_runs
+                )
             else:
                 query_and_print_result(driver, query, print_query=True)
         else:
