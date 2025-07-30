@@ -56,6 +56,20 @@ jobs:
         run: |
           uv build
 
+  test:
+    needs: changes
+    if: ${{ needs.changes.outputs.code == 'true' }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Test
+        run: |
+          uv run pytest -v --inline-snapshot report
+
   lint-workflows:
     needs: changes
     if: ${{ needs.changes.outputs.workflows == 'true' }}

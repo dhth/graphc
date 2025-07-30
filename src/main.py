@@ -4,7 +4,7 @@ from pathlib import Path
 
 from rich import print as rprint
 
-from cli import parse_args
+from cli import Args, parse_args
 from console import run_loop
 from db import benchmark_query, get_db_driver, query_and_print_result
 from errors import StdinIsTTYError, error_follow_up, is_error_unexpected
@@ -18,17 +18,15 @@ def main():
     try:
         args = parse_args()
 
+        if args.debug:
+            print_debug_info(args)
+            return
+
         db_uri = get_db_uri(args.db_uri)
         driver = get_db_driver(db_uri)
         driver.verify_connectivity()
 
         if args.query:
-            if args.benchmark and args.bench_num_runs < 1:
-                raise ValueError("number of benchmark runs must be >= 1")
-
-            if args.benchmark and args.bench_warmup_num_runs < 0:
-                raise ValueError("number of warmup runs must be >= 0")
-
             query = get_query(args.query)
 
             if args.benchmark:
@@ -38,9 +36,6 @@ def main():
             else:
                 query_and_print_result(driver, query, print_query=True)
         else:
-            if args.benchmark:
-                raise ValueError("benchmarking is only applicable in query mode")
-
             user_data_dir = get_data_dir()
             history_file_path = Path(user_data_dir) / "history.txt"
             run_loop(driver, db_uri, history_file_path)
@@ -67,6 +62,26 @@ This isn't supposed to happen; let [blue]{AUTHOR}[/] know via [blue]{ISSUES_URL}
             )
 
         sys.exit(1)
+
+
+def print_debug_info(args: Args):
+    db_uri = get_db_uri(args.db_uri)
+
+    query = get_query(args.query) if args.query else None
+
+    print(f"""\
+debug info
+
+database URI               {db_uri}\
+""")
+
+    if query:
+        print(f"""\
+query                      {query}
+benchmark                  {args.benchmark}
+benchmark num runs         {args.bench_num_runs}
+benchmark warmup num runs  {args.bench_warmup_num_runs}\
+""")
 
 
 def get_db_uri(db_uri_from_flag: str | None) -> str:

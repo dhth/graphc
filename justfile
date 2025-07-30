@@ -1,11 +1,12 @@
 set dotenv-load
 
 alias f := format
-alias t := ty
+alias i := install
 alias l := lint
 alias q := query
 alias r := run
-alias i := install
+alias re := review
+alias t := test
 
 format *FLAGS:
     uv run ruff format . {{FLAGS}}
@@ -32,3 +33,9 @@ install:
 
 queryf FILE:
     uv run src/main.py -q - < {{FILE}}
+
+test *FLAGS:
+    uv run pytest --inline-snapshot report {{FLAGS}}
+
+review *FLAGS:
+    uv run pytest --inline-snapshot review {{FLAGS}}
