@@ -5,7 +5,7 @@ from typing import List
 from neo4j import Driver
 from prompt_toolkit import prompt
 from prompt_toolkit.history import FileHistory
-from rich import print
+from rich import print as rprint
 
 from db import query_and_print_result
 
@@ -21,7 +21,7 @@ def run_loop(driver: Driver, db_uri: str, history_file_path: Path):
 
 
 def print_banner():
-    print(r"""[blue]
+    rprint(r"""[blue]
                      _    ___ 
   __ _ _ _ __ _ _ __| |_ / __|
  / _` | '_/ _` | '_ \ ' \ (__ 
@@ -31,20 +31,22 @@ def print_banner():
 
 
 def print_help(db_uri: str):
-    print(f"[blue]connected to {db_uri}[/blue]")
-    print()
-    print("[yellow]commands[/yellow]")
-    print(f"[yellow]  '{'/'.join(HELP_CMDS)}' to show help[/yellow]")
-    print(f"[yellow]  '{'/'.join(CLEAR_CMDS)}' to clear screen[/yellow]")
-    print(f"[yellow]  '{'/'.join(QUIT_CMDS)}' to quit[/yellow]")
-    print()
-    print("[green]keymaps[/green]")
-    print(f"[green]  '<esc>' to enter vim mode[/green]")
-    print(f"[green]  '↑' to scroll up[/green]")
-    print(f"[green]  'k' to scroll up (in vim mode)[/green]")
-    print(f"[green]  '↓' to scroll down[/green]")
-    print(f"[green]  'j' to scroll down (in vim mode)[/green]")
-    print()
+    help_text = f"""\
+[blue]connected to {db_uri}[/blue]
+
+[yellow]commands[/yellow]
+[yellow]  '{"/".join(HELP_CMDS)}' to show help[/yellow]
+[yellow]  '{"/".join(CLEAR_CMDS)}' to clear screen[/yellow]
+[yellow]  '{"/".join(QUIT_CMDS)}' to quit[/yellow]
+
+[green]keymaps[/green]
+[green]  '<esc>' to enter vim mode[/green]
+[green]  '↑' to scroll up[/green]
+[green]  'k' to scroll up (in vim mode)[/green]
+[green]  '↓' to scroll down[/green]
+[green]  'j' to scroll down (in vim mode)[/green]
+"""
+    rprint(help_text)
 
 
 class QueryFileHistory(FileHistory):
@@ -90,7 +92,7 @@ def loop(driver: Driver, db_uri: str, history_file_path: Path):
         try:
             query_and_print_result(driver, user_input)
         except Exception as e:
-            print(f"[red]Error[/red]: {e}")
+            rprint(f"[red]Error[/red]: {e}")
 
         print()
 

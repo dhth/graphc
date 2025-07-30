@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 
-from rich import print
+from rich import print as rprint
 
 from cli import parse_args
 from console import run_loop
@@ -32,12 +32,14 @@ def main():
     except KeyboardInterrupt:
         sys.exit(1)
     except Exception as e:
-        print(f"[red]Error[/red]: {e}", file=sys.stderr)
+        rprint(f"[red]Error[/red]: {e}", file=sys.stderr)
 
         if is_error_unexpected(e):
-            print("---", file=sys.stderr)
-            print(
-                f"This isn't supposed to happen; let {AUTHOR} know via {ISSUES_URL}",
+            rprint(
+                f"""\
+---
+This isn't supposed to happen; let [blue]{AUTHOR}[/] know via [blue]{ISSUES_URL}[/]\
+""",
                 file=sys.stderr,
             )
 
