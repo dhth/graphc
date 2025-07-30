@@ -35,9 +35,11 @@ def main():
         rprint(f"[red]Error[/red]: {e}", file=sys.stderr)
 
         if is_error_unexpected(e):
-            print("---", file=sys.stderr)
             rprint(
-                f"This isn't supposed to happen; let {AUTHOR} know via {ISSUES_URL}",
+                f"""\
+---
+This isn't supposed to happen; let [blue]{AUTHOR}[/] know via [blue]{ISSUES_URL}[/]\
+""",
                 file=sys.stderr,
             )
 

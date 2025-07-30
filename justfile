@@ -28,4 +28,4 @@ run *FLAGS:
     uv run src/main.py {{FLAGS}}
 
 install:
-    uv tool install .
+    uv tool install --reinstall .

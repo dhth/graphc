@@ -16,7 +16,7 @@ def parse_args() -> Args:
 examples:
   # Interactive mode
   DB_URI='bolt://127.0.0.1:7687' DB_USER='user' DB_PASSWORD='password' graphc
-  graphc -d 'DB_URI='bolt://abc.xyz.us-east-1.neptune.amazonaws.com:8182'
+  graphc -d 'bolt://abc.xyz.us-east-1.neptune.amazonaws.com:8182'
 
   # One-off query mode
   graphc --query 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5'
