@@ -35,7 +35,7 @@ def main():
         print(f"[red]Error[/red]: {e}", file=sys.stderr)
 
         if is_error_unexpected(e):
-            print("---")
+            print("---", file=sys.stderr)
             print(
                 f"This isn't supposed to happen; let {AUTHOR} know via {ISSUES_URL}",
                 file=sys.stderr,
@@ -43,7 +43,7 @@ def main():
 
         follow_up = error_follow_up(e)
         if follow_up:
-            print()
+            print(file=sys.stderr)
             print(
                 follow_up,
                 file=sys.stderr,
