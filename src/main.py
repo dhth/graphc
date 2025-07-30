@@ -23,14 +23,11 @@ def main():
         driver.verify_connectivity()
 
         if args.query:
-            if args.benchmark and not args.query:
-                raise ValueError("--benchmark requires --query to be specified")
-
             if args.benchmark and args.bench_num_runs < 1:
-                raise ValueError("--bench-num-runs must be at least 1")
+                raise ValueError("number of benchmark runs must be >= 1")
 
             if args.benchmark and args.bench_warmup_num_runs < 0:
-                raise ValueError("--bench-warmup-num-runs must be non-negative")
+                raise ValueError("number of warmup runs must be >= 0")
 
             query = get_query(args.query)
 
@@ -42,9 +39,7 @@ def main():
                 query_and_print_result(driver, query, print_query=True)
         else:
             if args.benchmark:
-                raise ValueError(
-                    "--benchmark can only be used with --query (one-shot mode)"
-                )
+                raise ValueError("benchmarking is only applicable in query mode")
 
             user_data_dir = get_data_dir()
             history_file_path = Path(user_data_dir) / "history.txt"
