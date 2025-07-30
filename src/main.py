@@ -6,7 +6,7 @@ from rich import print as rprint
 
 from cli import parse_args
 from console import run_loop
-from db import get_db_driver, query_and_print_result
+from db import benchmark_query, get_db_driver, query_and_print_result
 from errors import StdinIsTTYError, error_follow_up, is_error_unexpected
 from utils import get_data_dir
 
@@ -23,9 +23,24 @@ def main():
         driver.verify_connectivity()
 
         if args.query:
+            if args.benchmark and args.bench_num_runs < 1:
+                raise ValueError("number of benchmark runs must be >= 1")
+
+            if args.benchmark and args.bench_warmup_num_runs < 0:
+                raise ValueError("number of warmup runs must be >= 0")
+
             query = get_query(args.query)
-            query_and_print_result(driver, query, print_query=True)
+
+            if args.benchmark:
+                benchmark_query(
+                    driver, query, args.bench_num_runs, args.bench_warmup_num_runs
+                )
+            else:
+                query_and_print_result(driver, query, print_query=True)
         else:
+            if args.benchmark:
+                raise ValueError("benchmarking is only applicable in query mode")
+
             user_data_dir = get_data_dir()
             history_file_path = Path(user_data_dir) / "history.txt"
             run_loop(driver, db_uri, history_file_path)

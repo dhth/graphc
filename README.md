@@ -15,8 +15,10 @@ via an interactive console.
 ⚡️ Usage
 ---
 
+### Basic usage
+
 ```text
-usage: graphc [-h] [-q STRING] [-d STRING]
+usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-w INTEGER]
 
 Query Neo4j/Neptune databases
 
@@ -26,6 +28,11 @@ options:
                         Cypher query to execute. If not provided, starts interactive mode.
   -d STRING, --db-uri STRING
                         Database URI
+  -b, --benchmark       Benchmark query execution times without showing results (only applicable in query mode)
+  -n INTEGER, --bench-num-runs INTEGER
+                        Number of benchmark runs (default: 5)
+  -w INTEGER, --bench-warmup-num-runs INTEGER
+                        Number of warmup runs before benchmarking (default: 0)
 ```
 
 ```bash
@@ -35,5 +42,31 @@ graphc -d 'bolt://abc.xyz.us-east-1.neptune.amazonaws.com:8182'
 
 # One-off query mode
 graphc --query 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5'
+graphc -q - < query.cypher
 echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
+```
+
+### Benchmarking
+
+```bash
+cat query.cypher | graphc -c - -b -n 5 -w 2
+```
+
+```text
+Warming up (2 runs) ...
+Warmup  1:   627.84 ms
+Warmup  2:   452.06 ms
+
+Benchmarking (5 runs) ...
+Run  1:   451.92 ms
+Run  2:   449.51 ms
+Run  3:   451.52 ms
+Run  4:   453.09 ms
+Run  5:   445.73 ms
+
+Statistics:
+Mean:     450.35 ms
+Median:   451.52 ms
+Min:      445.73 ms
+Max:      453.09 ms
 ```
