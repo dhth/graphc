@@ -6,6 +6,8 @@ from dataclasses import dataclass
 class Args:
     query: str | None
     db_uri: str | None
+    benchmark: bool
+    bench_num_runs: int
 
 
 def parse_args() -> Args:
@@ -41,5 +43,26 @@ examples:
         help="Database URI",
     )
 
+    parser.add_argument(
+        "-b",
+        "--benchmark",
+        action="store_true",
+        help="Benchmark query execution times without showing results (only applicable in query mode)",
+    )
+
+    parser.add_argument(
+        "-n",
+        "--bench-num-runs",
+        type=int,
+        default=5,
+        metavar="INTEGER",
+        help="Number of benchmark runs (default: 5)",
+    )
+
     args = parser.parse_args()
-    return Args(query=args.query, db_uri=args.db_uri)
+    return Args(
+        query=args.query,
+        db_uri=args.db_uri,
+        benchmark=args.benchmark,
+        bench_num_runs=args.bench_num_runs,
+    )

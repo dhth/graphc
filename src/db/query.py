@@ -1,3 +1,4 @@
+import statistics
 import time
 
 import pandas as pd
@@ -25,3 +26,25 @@ def query_and_print_result(driver: Driver, query: str, *, print_query: bool = Fa
 def query_db(driver: Driver, query: str) -> pd.DataFrame:
     with driver.session() as session:
         return session.run(query).to_df()  # type: ignore[arg-type]
+
+
+def benchmark_query(driver: Driver, query: str, num_runs: int):
+    print(f"[yellow]Benchmarking query ({num_runs} runs)...\n[/]")
+
+    execution_times = []
+
+    for run in range(1, num_runs + 1):
+        start = time.perf_counter()
+        query_db(driver, query)
+        took_ms = (time.perf_counter() - start) * 1000
+        execution_times.append(took_ms)
+
+        print(f"Run {run:2d}: {took_ms:8.2f} ms")
+
+    print(f"""
+[yellow]Statistics:[/]
+Mean:   {statistics.mean(execution_times):8.2f} ms
+Median: {statistics.median(execution_times):8.2f} ms
+Min:    {min(execution_times):8.2f} ms
+Max:    {max(execution_times):8.2f} ms\
+""")
