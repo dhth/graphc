@@ -9,6 +9,7 @@ class Args:
     benchmark: bool
     bench_num_runs: int
     bench_warmup_num_runs: int
+    debug: bool
 
 
 def parse_args() -> Args:
@@ -70,11 +71,29 @@ examples:
         help="Number of warmup runs before benchmarking (default: 0)",
     )
 
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Print runtime configuration and exit",
+    )
+
     args = parser.parse_args()
+
+    if args.query:
+        if args.benchmark and args.bench_num_runs < 1:
+            raise ValueError("number of benchmark runs must be >= 1")
+
+        if args.benchmark and args.bench_warmup_num_runs < 0:
+            raise ValueError("number of warmup runs must be >= 0")
+    else:
+        if args.benchmark:
+            raise ValueError("benchmarking is only applicable in query mode")
+
     return Args(
         query=args.query,
         db_uri=args.db_uri,
         benchmark=args.benchmark,
         bench_num_runs=args.bench_num_runs,
         bench_warmup_num_runs=args.bench_warmup_num_runs,
+        debug=args.debug,
     )
