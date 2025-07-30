@@ -12,12 +12,15 @@ def parse_args() -> Args:
     parser = argparse.ArgumentParser(
         description="Query Neo4j/Neptune databases",
         prog="graphc",
-        epilog="""examples:
-  graphc                                                            # Start interactive mode
-  graphc -q 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5'           # Execute single query
-  echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -  # Read query from stdin
-  graphc -d 'bolt://127.0.0.1:7687'                                 # Provide database URI via flag
-  DB_URI='bolt://127.0.0.1:7687' graphc                             # Provide database URI via env var
+        epilog="""\
+examples:
+  # Interactive mode
+  DB_URI='bolt://127.0.0.1:7687' DB_USER='user' DB_PASSWORD='password' graphc
+  graphc -d 'DB_URI='bolt://abc.xyz.us-east-1.neptune.amazonaws.com:8182'
+
+  # One-off query mode
+  graphc --query 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5'
+  echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
