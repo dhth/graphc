@@ -29,3 +29,6 @@ run *FLAGS:
 
 install:
     uv tool install --reinstall .
+
+queryf FILE:
+    uv run src/main.py -q - < {{FILE}}
