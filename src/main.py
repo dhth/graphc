@@ -4,10 +4,10 @@ from pathlib import Path
 
 from rich import print
 
-import errors
 from cli import parse_args
 from console import run_loop
 from db import get_db_driver, query_and_print_result
+from errors import StdinIsTTYError, error_follow_up, is_error_unexpected
 from utils import get_data_dir
 
 AUTHOR = "@dhth"
@@ -31,16 +31,24 @@ def main():
             run_loop(driver, db_uri, history_file_path)
     except KeyboardInterrupt:
         sys.exit(1)
-    except errors.UserDataDirError as e:
-        print(f"[red]Error[/red]: {e}", file=sys.stderr)
-        print("---")
-        print(
-            f"This isn't supposed to happen; let {AUTHOR} know via {ISSUES_URL}",
-            file=sys.stderr,
-        )
-        sys.exit(1)
     except Exception as e:
         print(f"[red]Error[/red]: {e}", file=sys.stderr)
+
+        if is_error_unexpected(e):
+            print("---")
+            print(
+                f"This isn't supposed to happen; let {AUTHOR} know via {ISSUES_URL}",
+                file=sys.stderr,
+            )
+
+        follow_up = error_follow_up(e)
+        if follow_up:
+            print()
+            print(
+                follow_up,
+                file=sys.stderr,
+            )
+
         sys.exit(1)
 
 
@@ -61,6 +69,9 @@ def get_db_uri(db_uri_from_flag: str | None) -> str:
 
 def get_query(query_from_args: str) -> str:
     if query_from_args == "-":
+        if sys.stdin.isatty():
+            raise StdinIsTTYError("cannot read query from stdin when it is a TTY")
+
         try:
             query = sys.stdin.read().strip()
             return query
