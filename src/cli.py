@@ -23,6 +23,7 @@ examples:
 
   # One-off query mode
   graphc --query 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5'
+  graphc -q - < query.cypher
   echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
 """,
         formatter_class=argparse.RawDescriptionHelpFormatter,
