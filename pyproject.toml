@@ -14,12 +14,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "inline-snapshot>=0.14.0",
+    "pytest>=8.0.0",
     "ruff>=0.12.5",
     "ty>=0.0.1a16",
-]
-test = [
-    "pytest>=8.0.0",
-    "inline-snapshot>=0.14.0",
 ]
 
 [project.scripts]

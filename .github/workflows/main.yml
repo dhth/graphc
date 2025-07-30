@@ -69,7 +69,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - name: Test
         run: |
-          uv run pytest --inline-snapshot report
+          uv run pytest -v --inline-snapshot report
 
   lint-workflows:
     needs: changes
