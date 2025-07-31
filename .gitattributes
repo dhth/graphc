@@ -1,1 +1,2 @@
 *justfile linguist-vendored
+*.cypher linguist-vendored

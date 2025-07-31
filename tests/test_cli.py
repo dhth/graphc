@@ -1,5 +1,6 @@
-from conftest import Runner
 from inline_snapshot import snapshot
+
+from .conftest import Runner
 
 # ------------- #
 #   SUCCESSES   #

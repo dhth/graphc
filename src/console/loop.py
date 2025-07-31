@@ -9,18 +9,21 @@ from rich import print as rprint
 
 from db import query_and_print_result
 
+from .completions import QueryFilePathCompleter
+from .utils import get_query_from_file
+
 CLEAR_CMDS = ["clear"]
 HELP_CMDS = ["help", ":h"]
 QUIT_CMDS = ["bye", "exit", "quit", ":q"]
 
 
-def run_loop(driver: Driver, db_uri: str, history_file_path: Path):
+def run_loop(driver: Driver, db_uri: str, history_file_path: Path) -> None:
     print_banner()
     print_help(db_uri)
     loop(driver, db_uri, history_file_path)
 
 
-def print_banner():
+def print_banner() -> None:
     rprint(r"""[blue]
                      _    ___ 
   __ _ _ _ __ _ _ __| |_ / __|
@@ -30,21 +33,23 @@ def print_banner():
 [/blue]""")
 
 
-def print_help(db_uri: str):
+def print_help(db_uri: str) -> None:
     help_text = f"""\
-[blue]connected to {db_uri}[/blue]
+[blue]connected to {db_uri}[/]
 
 [yellow]commands[/yellow]
-[yellow]  '{"/".join(HELP_CMDS)}' to show help[/yellow]
-[yellow]  '{"/".join(CLEAR_CMDS)}' to clear screen[/yellow]
-[yellow]  '{"/".join(QUIT_CMDS)}' to quit[/yellow]
+[yellow]  '{"/".join(HELP_CMDS)}' to show help[/]
+[yellow]  '{"/".join(CLEAR_CMDS)}' to clear screen[/]
+[yellow]  '{"/".join(QUIT_CMDS)}' to quit[/]
+[yellow]  '@<filename>' to execute query from a local file[/]
 
 [green]keymaps[/green]
-[green]  '<esc>' to enter vim mode[/green]
-[green]  '↑' to scroll up[/green]
-[green]  'k' to scroll up (in vim mode)[/green]
-[green]  '↓' to scroll down[/green]
-[green]  'j' to scroll down (in vim mode)[/green]
+[green]  '<esc>' to enter vim mode[/]
+[green]  '↑' to scroll up[/]
+[green]  'k' to scroll up (in vim mode)[/]
+[green]  '↓' to scroll down[/]
+[green]  'j' to scroll down (in vim mode)[/]
+[green]  'tab' to cycle through path suggestions (in insert mode, after '@')[/]
 """
     rprint(help_text)
 
@@ -61,10 +66,12 @@ class QueryFileHistory(FileHistory):
         super().append_string(string)
 
 
-def loop(driver: Driver, db_uri: str, history_file_path: Path):
+def loop(driver: Driver, db_uri: str, history_file_path: Path) -> None:
     history = QueryFileHistory(
         history_file_path, strings_to_ignore=HELP_CMDS + CLEAR_CMDS + QUIT_CMDS
     )
+
+    completer = QueryFilePathCompleter()
 
     while True:
         user_input = prompt(
@@ -72,6 +79,7 @@ def loop(driver: Driver, db_uri: str, history_file_path: Path):
             history=history,
             vi_mode=True,
             enable_history_search=True,
+            completer=completer,
         ).strip()
 
         if user_input == "":
@@ -89,13 +97,26 @@ def loop(driver: Driver, db_uri: str, history_file_path: Path):
             clear_screen()
             continue
 
+        query_to_run: str
+
+        if user_input.startswith("@"):
+            file_path = user_input[1:].strip()
+            try:
+                query_to_run = get_query_from_file(file_path)
+            except Exception as e:
+                rprint(f"[red]Error[/]: failed to read query from file: {e}")
+                print()
+                continue
+        else:
+            query_to_run = user_input
+
         try:
-            query_and_print_result(driver, user_input)
+            query_and_print_result(driver, query_to_run)
         except Exception as e:
-            rprint(f"[red]Error[/red]: {e}")
+            rprint(f"[red]Error[/]: {e}")
 
         print()
 
 
-def clear_screen():
+def clear_screen() -> None:
     os.system("cls" if os.name == "nt" else "clear")
