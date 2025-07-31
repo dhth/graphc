@@ -18,10 +18,11 @@ class QueryFilePathCompleter(Completer):
     ) -> Iterator[Completion]:
         text = document.text
 
-        if document.cursor_position == 0:
+        if not text.startswith("@"):
             return
 
-        if not text.startswith("@"):
+        # make sure the cursor is at the end of the line
+        if not document.cursor_position == len(text):
             return
 
         file_part = text[1:]
