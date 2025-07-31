@@ -14,7 +14,7 @@ class Args:
 
 def parse_args() -> Args:
     parser = argparse.ArgumentParser(
-        description="Query Neo4j/Neptune databases",
+        description="Query Neo4j/AWS Neptune databases via an interactive console",
         prog="graphc",
         epilog="""\
 examples:
@@ -35,7 +35,7 @@ examples:
         "--query",
         type=str,
         metavar="STRING",
-        help="Cypher query to execute. If not provided, starts interactive mode.",
+        help="Cypher query to execute. If not provided, starts interactive console",
     )
 
     parser.add_argument(

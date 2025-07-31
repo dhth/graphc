@@ -23,13 +23,13 @@ exit_code: 0
 usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-w INTEGER]
               [--debug]
 
-Query Neo4j/Neptune databases
+Query Neo4j/AWS Neptune databases via an interactive console
 
 options:
   -h, --help            show this help message and exit
   -q STRING, --query STRING
                         Cypher query to execute. If not provided, starts
-                        interactive mode.
+                        interactive console
   -d STRING, --db-uri STRING
                         Database URI
   -b, --benchmark       Benchmark query execution times without showing

@@ -15,17 +15,15 @@ via an interactive console.
 ⚡️ Usage
 ---
 
-### Basic usage
-
 ```text
-usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-w INTEGER]
+usage: graphc [OPTIONS]
 
-Query Neo4j/Neptune databases
+Query Neo4j/AWS Neptune databases via an interactive console
 
 options:
   -h, --help            show this help message and exit
   -q STRING, --query STRING
-                        Cypher query to execute. If not provided, starts interactive mode.
+                        Cypher query to execute. If not provided, starts interactive console
   -d STRING, --db-uri STRING
                         Database URI
   -b, --benchmark       Benchmark query execution times without showing results (only applicable in query mode)
@@ -46,7 +44,35 @@ graphc -q - < query.cypher
 echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
 ```
 
-### Benchmarking
+📟 Console
+---
+
+`graphc` comes with a console where you can execute queries in an interactive
+manner.
+
+![banner](https://tools.dhruvs.space/images/graphc/v0-1-0/banner.png)
+
+### commands
+
+- `help/:h` to show help
+- `clear` to clear screen
+- `bye/exit/quit/:q` to quit
+- `@<filename>` to execute query from a local file
+
+### Keymaps
+
+- `<esc>` to enter vim mode
+- `↑` to scroll up
+- `k` to scroll up (in vim mode)
+- `↓` to scroll down
+- `j` to scroll down (in vim mode)
+- `tab` to cycle through path suggestions (in insert mode, after `@`)
+
+🔢 Benchmarking
+---
+
+You can benchmark the execution times for a query using the `--benchmark/-b`
+flag.
 
 ```bash
 cat query.cypher | graphc -c - -b -n 5 -w 2
