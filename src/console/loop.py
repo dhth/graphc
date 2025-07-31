@@ -49,7 +49,7 @@ def print_help(db_uri: str) -> None:
 [green]  'k' to scroll up (in vim mode)[/]
 [green]  '↓' to scroll down[/]
 [green]  'j' to scroll down (in vim mode)[/]
-[green]  '@' to trigger file completion (press tab to complete)[/]
+[green]  'tab' to cycle through path suggestions (in insert mode, after '@')[/]
 """
     rprint(help_text)
 
@@ -110,11 +110,10 @@ def loop(driver: Driver, db_uri: str, history_file_path: Path) -> None:
         else:
             query_to_run = user_input
 
-        if query_to_run:
-            try:
-                query_and_print_result(driver, query_to_run)
-            except Exception as e:
-                rprint(f"[red]Error[/]: {e}")
+        try:
+            query_and_print_result(driver, query_to_run)
+        except Exception as e:
+            rprint(f"[red]Error[/]: {e}")
 
         print()
 

@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def get_query_from_file(file_path: str) -> str:
-    if not file_path or not file_path.strip():
+    if len(file_path.strip()) == 0:
         raise ValueError("no file specified")
 
     query_from_file = Path(file_path).read_text().strip()
