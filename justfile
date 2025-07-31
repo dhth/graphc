@@ -35,7 +35,7 @@ queryf FILE:
     uv run src/main.py -q - < {{FILE}}
 
 test *FLAGS:
-    uv run pytest --inline-snapshot report {{FLAGS}}
+    uv run pytest -v --inline-snapshot report {{FLAGS}}
 
 review *FLAGS:
-    uv run pytest --inline-snapshot review {{FLAGS}}
+    uv run pytest -v --inline-snapshot review {{FLAGS}}

@@ -56,7 +56,7 @@ def test_debug_flag(runner: Runner):
     # GIVEN
     args = [
         "--db-uri",
-        "bolt://127.0.0.1:7687",
+        "bolt://127.0.0.1:9999",
         "--query",
         "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
         "--benchmark",
@@ -78,7 +78,7 @@ exit_code: 0
 ----- stdout -----
 debug info
 
-database URI               bolt://127.0.0.1:7687
+database URI               bolt://127.0.0.1:9999
 query                      MATCH (n: Node) RETURN n.id, n.name LIMIT 5
 benchmark                  True
 benchmark num runs         10
@@ -93,7 +93,7 @@ def test_db_uri_can_be_provided_via_an_env_var(runner: Runner):
         "--debug",
     ]
     env = {
-        "DB_URI": "bolt://127.0.0.1:7687",
+        "DB_URI": "bolt://127.0.0.1:9999",
     }
 
     # WHEN
@@ -106,7 +106,7 @@ exit_code: 0
 ----- stdout -----
 debug info
 
-database URI               bolt://127.0.0.1:7687
+database URI               bolt://127.0.0.1:9999
 ----- stderr -----
 """)
 
@@ -138,7 +138,7 @@ Error: database URI is empty
 def test_benchmark_requires_query(runner: Runner):
     # GIVEN
     args = ["--benchmark"]
-    env = {"DB_URI": "bolt://127.0.0.1:7687"}
+    env = {"DB_URI": "bolt://127.0.0.1:9999"}
 
     # WHEN
     result = runner(args, env)
@@ -201,4 +201,46 @@ exit_code: 1
 
 ----- stderr -----
 Error: number of warmup runs must be >= 0
+""")
+
+
+def test_db_uri_requires_a_scheme(runner: Runner):
+    # GIVEN
+    args = []
+    env = {"DB_URI": "127.0.0.1:9999"}
+
+    # WHEN
+    result = runner(args, env)
+
+    # THEN
+    assert result == snapshot("""\
+success: false
+exit_code: 1
+----- stdout -----
+
+----- stderr -----
+Error: URI scheme '' is not supported. Supported URI schemes are ['bolt', \n\
+'bolt+ssc', 'bolt+s', 'neo4j', 'neo4j+ssc', 'neo4j+s']. Examples: \n\
+bolt://host[:port] or neo4j://host[:port][?routing_context]
+""")
+
+
+def test_db_uri_scheme_needs_to_be_supported(runner: Runner):
+    # GIVEN
+    args = []
+    env = {"DB_URI": "blah://127.0.0.1:9999"}
+
+    # WHEN
+    result = runner(args, env)
+
+    # THEN
+    assert result == snapshot("""\
+success: false
+exit_code: 1
+----- stdout -----
+
+----- stderr -----
+Error: URI scheme 'blah' is not supported. Supported URI schemes are ['bolt', \n\
+'bolt+ssc', 'bolt+s', 'neo4j', 'neo4j+ssc', 'neo4j+s']. Examples: \n\
+bolt://host[:port] or neo4j://host[:port][?routing_context]
 """)

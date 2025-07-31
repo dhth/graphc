@@ -13,7 +13,7 @@ def runner() -> Runner:
     project_root = Path(__file__).parent.parent
 
     def _run(args: list[str], env: dict[str, str]) -> str:
-        cmd = ["uv", "run", "python", "src/main.py"] + args
+        cmd = ["uv", "run", "src/main.py"] + args
 
         process_env = os.environ.copy()
         process_env.update(env)
