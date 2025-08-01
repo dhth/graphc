@@ -7,6 +7,7 @@ from rich import print as rprint
 from cli import Args, parse_args
 from console import run_loop
 from db import benchmark_query, get_db_driver, query_and_print_result
+from domain import RunBehaviours
 from errors import StdinIsTTYError, error_follow_up, is_error_unexpected
 from utils import get_data_dir
 
@@ -34,11 +35,13 @@ def main():
                     driver, query, args.bench_num_runs, args.bench_warmup_num_runs
                 )
             else:
-                query_and_print_result(driver, query, print_query=True)
+                behaviours = RunBehaviours(args.write, args.output_format, True)
+                query_and_print_result(driver, query, behaviours)
         else:
             user_data_dir = get_data_dir()
             history_file_path = Path(user_data_dir) / "history.txt"
-            run_loop(driver, db_uri, history_file_path)
+            behaviours = RunBehaviours(args.write, args.output_format, False)
+            run_loop(driver, db_uri, history_file_path, behaviours)
     except KeyboardInterrupt:
         sys.exit(1)
     except Exception as e:
@@ -77,10 +80,20 @@ database URI               {db_uri}\
 
     if query:
         print(f"""\
-query                      {query}
+query                      {query}\
+""")
+
+    if args.benchmark:
+        print(f"""\
 benchmark                  {args.benchmark}
 benchmark num runs         {args.bench_num_runs}
 benchmark warmup num runs  {args.bench_warmup_num_runs}\
+""")
+
+    if args.write:
+        print(f"""\
+write output               {args.write}
+output format              {args.output_format.value}\
 """)
 
 

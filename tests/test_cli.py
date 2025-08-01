@@ -20,8 +20,8 @@ def test_help_flag(runner: Runner):
 success: true
 exit_code: 0
 ----- stdout -----
-usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-w INTEGER]
-              [--debug]
+usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-W INTEGER]
+              [--debug] [-w] [-f {json,csv}]
 
 Query Neo4j/AWS Neptune databases via an interactive console
 
@@ -36,9 +36,13 @@ options:
                         results (only applicable in query mode)
   -n INTEGER, --bench-num-runs INTEGER
                         Number of benchmark runs (default: 5)
-  -w INTEGER, --bench-warmup-num-runs INTEGER
+  -W INTEGER, --bench-warmup-num-runs INTEGER
                         Number of warmup runs before benchmarking (default: 0)
   --debug               Print runtime configuration and exit
+  -w, --write           Write query results to file (or start console with
+                        write mode on)
+  -f {json,csv}, --format {json,csv}
+                        Output file format for query results
 
 examples:
   # Interactive mode
@@ -108,6 +112,97 @@ exit_code: 0
 debug info
 
 database URI               bolt://127.0.0.1:9999
+----- stderr -----
+""")
+
+
+def test_write_flag_with_default_format(runner: Runner):
+    # GIVEN
+    args = [
+        "--db-uri",
+        "bolt://127.0.0.1:9999",
+        "--query",
+        "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
+        "--write",
+        "--debug",
+    ]
+    env = {}
+
+    # WHEN
+    result = runner(args, env)
+
+    # THEN
+    assert result == snapshot("""\
+success: true
+exit_code: 0
+----- stdout -----
+debug info
+
+database URI               bolt://127.0.0.1:9999
+query                      MATCH (n: Node) RETURN n.id, n.name LIMIT 5
+write output               True
+output format              csv
+----- stderr -----
+""")
+
+
+def test_write_flag_with_explicit_output_format(runner: Runner):
+    # GIVEN
+    args = [
+        "--db-uri",
+        "bolt://127.0.0.1:9999",
+        "--query",
+        "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
+        "--write",
+        "--format",
+        "csv",
+        "--debug",
+    ]
+    env = {}
+
+    # WHEN
+    result = runner(args, env)
+
+    # THEN
+    assert result == snapshot("""\
+success: true
+exit_code: 0
+----- stdout -----
+debug info
+
+database URI               bolt://127.0.0.1:9999
+query                      MATCH (n: Node) RETURN n.id, n.name LIMIT 5
+write output               True
+output format              csv
+----- stderr -----
+""")
+
+
+def test_format_flag_without_write_flag(runner: Runner):
+    # GIVEN
+    args = [
+        "--db-uri",
+        "bolt://127.0.0.1:9999",
+        "--query",
+        "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
+        "--format",
+        "json",
+        "--debug",
+    ]
+    env = {}
+
+    # WHEN
+    result = runner(args, env)
+
+    # THEN
+    assert result == snapshot("""\
+success: true
+exit_code: 0
+----- stdout -----
+debug info
+
+database URI               bolt://127.0.0.1:9999
+query                      MATCH (n: Node) RETURN n.id, n.name LIMIT 5
 ----- stderr -----
 """)
 
@@ -244,4 +339,36 @@ exit_code: 1
 Error: URI scheme 'blah' is not supported. Supported URI schemes are ['bolt', \n\
 'bolt+ssc', 'bolt+s', 'neo4j', 'neo4j+ssc', 'neo4j+s']. Examples: \n\
 bolt://host[:port] or neo4j://host[:port][?routing_context]
+""")
+
+
+def test_output_format_needs_to_be_valid(runner: Runner):
+    # GIVEN
+    args = [
+        "--db-uri",
+        "bolt://127.0.0.1:9999",
+        "--query",
+        "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
+        "--write",
+        "--format",
+        "xml",
+    ]
+    env = {}
+
+    # WHEN
+    result = runner(args, env)
+
+    # THEN
+    # argparse wraps the choices in single quotes on linux, so we snapshot
+    # against a normalised version
+    result_normalised = result.replace("'", "")
+    assert result_normalised == snapshot("""\
+success: false
+exit_code: 2
+----- stdout -----
+
+----- stderr -----
+usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-W INTEGER]
+              [--debug] [-w] [-f {json,csv}]
+graphc: error: argument -f/--format: invalid choice: xml (choose from json, csv)
 """)
