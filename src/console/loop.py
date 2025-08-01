@@ -56,9 +56,9 @@ def print_help(db_uri: str) -> None:
   @<filename>                    execute query from a local file[/]
 
 [green]keymaps
-  <esc>                          to enter vim mode
-  ↑ / k                          to scroll up in query history
-  ↓ / j                          to scroll down in query history
+  <esc>                          enter vim mode
+  ↑ / k                          scroll up in query history
+  ↓ / j                          scroll down in query history
   tab                            cycle through path suggestions (in insert mode, after '@')[/]
 """
     rprint(help_text)

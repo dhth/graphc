@@ -8,9 +8,7 @@
 `graphc` (stands for "graph console") lets you query Neo4j/AWS Neptune databases
 via an interactive console.
 
-> [!NOTE]
-> graphc is work-in-progress software. Its interface and functionality is likely
-> to change in the future.
+![console](https://tools.dhruvs.space/images/graphc/v0-1-0/console.gif)
 
 ⚡️ Usage
 ---
@@ -54,23 +52,45 @@ echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
 `graphc` comes with a console where you can execute queries in an interactive
 manner.
 
-![banner](https://tools.dhruvs.space/images/graphc/v0-1-0/banner.png)
+![console](https://tools.dhruvs.space/images/graphc/v0-1-0/console.png)
 
-### commands
+### Commands
 
-- `help/:h` to show help
-- `clear` to clear screen
-- `bye/exit/quit/:q` to quit
-- `@<filename>` to execute query from a local file
+| Command(s)                     | Description                     |
+|--------------------------------|---------------------------------|
+| `help` / `:h`                  | show help                       |
+| `clear`                        | clear screen                    |
+| `quit` / `exit` / `bye` / `:q` | quit                            |
+| `write <FORMAT>`               | turn ON write mode              |
+| `write off`                    | turn OFF write mode             |
+| `@<filename>`                  | execute query from a local file |
 
 ### Keymaps
 
-- `<esc>` to enter vim mode
-- `↑` to scroll up
-- `k` to scroll up (in vim mode)
-- `↓` to scroll down
-- `j` to scroll down (in vim mode)
-- `tab` to cycle through path suggestions (in insert mode, after `@`)
+| Key       | Description                                                |
+|-----------|------------------------------------------------------------|
+| `<esc>`   | to enter vim mode                                          |
+| `↑` / `k` | to scroll up in query history                              |
+| `↓` / `j` | to scroll down in query history                            |
+| `tab`     | cycle through path suggestions (in insert mode, after `@`) |
+
+✏️ Write mode
+---
+
+`graphc` lets you save query results to a file in both one-off query mode and
+console mode.
+
+```bash
+cat query.cypher | graphc -q - --write
+```
+
+In console mode, use the command `write <FORMAT>` (format can be `csv` or
+`json`).
+
+![write-mode-console](https://tools.dhruvs.space/images/graphc/v0-1-0/write-mode-console.png)
+
+`graphc` will save results in the directory it's run in, in a subdirectory
+called `.graphc`.
 
 🔢 Benchmarking
 ---
