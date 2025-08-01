@@ -359,7 +359,10 @@ def test_output_format_needs_to_be_valid(runner: Runner):
     result = runner(args, env)
 
     # THEN
-    assert result == snapshot("""\
+    # argparse wraps the choices in single quotes on linux, so we snapshot
+    # against a normalised version
+    result_normalised = result.replace("'", "")
+    assert result_normalised == snapshot("""\
 success: false
 exit_code: 2
 ----- stdout -----
@@ -367,5 +370,5 @@ exit_code: 2
 ----- stderr -----
 usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-W INTEGER]
               [--debug] [-w] [-f {json,csv}]
-graphc: error: argument -f/--format: invalid choice: 'xml' (choose from json, csv)
+graphc: error: argument -f/--format: invalid choice: xml (choose from json, csv)
 """)
