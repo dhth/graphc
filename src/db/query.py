@@ -5,13 +5,16 @@ import pandas as pd
 from neo4j import Driver
 from rich import print
 
+from domain import RunBehaviours
+from utils import write_df
 
-def query_and_print_result(driver: Driver, query: str, *, print_query: bool = False):
+
+def query_and_print_result(driver: Driver, query: str, behaviours: RunBehaviours):
     start = time.perf_counter()
     result = query_db(driver, query)
     took_ms = (time.perf_counter() - start) * 1000
 
-    if print_query:
+    if behaviours.print_query:
         print(f"[yellow]---\n{query}\n---[/]")
 
     print()
@@ -20,7 +23,15 @@ def query_and_print_result(driver: Driver, query: str, *, print_query: bool = Fa
     else:
         print(result)
 
-    print(f"[grey66]Took {took_ms:.2f} ms")
+    print()
+    print(f"[grey66]Took {took_ms:.2f} ms[/]")
+
+    if behaviours.write:
+        try:
+            output_path = write_df(result, behaviours.output_format)
+            print(f"[grey66]Wrote result to {output_path}[/]")
+        except Exception as e:
+            print(f"[red]Warning[/]: couldn't write result to file: {e}")
 
 
 def query_db(driver: Driver, query: str) -> pd.DataFrame:

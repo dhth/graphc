@@ -1,6 +1,8 @@
 import argparse
 from dataclasses import dataclass
 
+from domain.output import OutputFormat
+
 
 @dataclass
 class Args:
@@ -10,6 +12,8 @@ class Args:
     bench_num_runs: int
     bench_warmup_num_runs: int
     debug: bool
+    write: bool
+    output_format: OutputFormat
 
 
 def parse_args() -> Args:
@@ -63,7 +67,7 @@ examples:
     )
 
     parser.add_argument(
-        "-w",
+        "-W",
         "--bench-warmup-num-runs",
         type=int,
         default=0,
@@ -77,9 +81,27 @@ examples:
         help="Print runtime configuration and exit",
     )
 
+    parser.add_argument(
+        "-w",
+        "--write",
+        action="store_true",
+        help="Write query results to file (or start console with write mode on)",
+    )
+
+    parser.add_argument(
+        "-f",
+        "--format",
+        choices=OutputFormat.choices(),
+        default=OutputFormat.default().value,
+        help="Output file format for query results",
+    )
+
     args = parser.parse_args()
 
     if args.query:
+        if args.benchmark and args.write:
+            raise ValueError("cannot write output while benchmarking")
+
         if args.benchmark and args.bench_num_runs < 1:
             raise ValueError("number of benchmark runs must be >= 1")
 
@@ -89,6 +111,8 @@ examples:
         if args.benchmark:
             raise ValueError("benchmarking is only applicable in query mode")
 
+    output_format = OutputFormat.from_string(args.format)
+
     return Args(
         query=args.query,
         db_uri=args.db_uri,
@@ -96,4 +120,6 @@ examples:
         bench_num_runs=args.bench_num_runs,
         bench_warmup_num_runs=args.bench_warmup_num_runs,
         debug=args.debug,
+        write=args.write,
+        output_format=output_format,
     )

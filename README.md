@@ -29,8 +29,12 @@ options:
   -b, --benchmark       Benchmark query execution times without showing results (only applicable in query mode)
   -n INTEGER, --bench-num-runs INTEGER
                         Number of benchmark runs (default: 5)
-  -w INTEGER, --bench-warmup-num-runs INTEGER
+  -W INTEGER, --bench-warmup-num-runs INTEGER
                         Number of warmup runs before benchmarking (default: 0)
+  --debug               Print runtime configuration and exit
+  -w, --write           Write query results to file (or start console with write mode on)
+  -f {json,csv}, --format {json,csv}
+                        Output file format for query results
 ```
 
 ```bash
