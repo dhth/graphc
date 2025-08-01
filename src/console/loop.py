@@ -15,9 +15,9 @@ from .completions import QueryFilePathCompleter
 from .utils import get_query_from_file
 
 CLEAR_CMDS = ["clear"]
-HELP_CMDS = ["help", "h"]
+HELP_CMDS = ["help", ":h"]
 WRITE_CMDS = ["write"]
-QUIT_CMDS = ["bye", "exit", "quit"]
+QUIT_CMDS = ["bye", "exit", "quit", ":q"]
 
 
 def run_loop(
@@ -48,7 +48,7 @@ def print_help(db_uri: str) -> None:
 [blue]connected to {db_uri}[/]
 
 [yellow]commands
-  help / h                       show help
+  help / :h                      show help
   clear                          clear screen
   quit / exit / bye / :q         quit
   write <FORMAT>                 turn ON write mode
@@ -70,8 +70,9 @@ class QueryFileHistory(FileHistory):
         self._strings_to_ignore = set(strings_to_ignore)
 
     def append_string(self, string: str) -> None:
-        if string in self._strings_to_ignore:
-            return
+        for s in self._strings_to_ignore:
+            if string.startswith(s):
+                return
 
         super().append_string(string)
 
@@ -123,8 +124,8 @@ def loop(
             continue
 
         if user_input.startswith("write"):
-            els = user_input.split(" ")
-            if not len(els) == 2:
+            els = user_input.split()
+            if len(els) != 2:
                 rprint(
                     f"[red]Error[/]: incorrect command provided; correct syntax: 'write {'/'.join(OutputFormat.choices())}/off'"
                 )

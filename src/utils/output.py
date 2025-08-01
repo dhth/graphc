@@ -18,7 +18,7 @@ def get_output_path(format: OutputFormat) -> Path:
     output_dir.mkdir(exist_ok=True)
 
     now = datetime.now()
-    timestamp = now.strftime("%Y-%b-%d-%H-%M-%S").lower()
+    timestamp = now.strftime("%b-%d-%H-%M-%S").lower()
 
     match format:
         case OutputFormat.JSON:
