@@ -14,7 +14,7 @@ via an interactive console.
 ---
 
 ```sh
-uv tool install git+https://github.com/dhth/graphc
+uv tool install graphc
 ```
 
 ⚡️ Usage

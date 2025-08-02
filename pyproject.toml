@@ -1,8 +1,26 @@
 [project]
 name = "graphc"
-version = "0.1.0"
+version = "0.1.1"
 description = "query graph databases via an interactive console"
+readme = "README.md"
 requires-python = ">=3.12"
+license = "MIT"
+keywords = ["neo4j", "neptune", "graph", "database", "cypher", "console", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Database",
+    "Topic :: Utilities",
+]
+
+[urls]
+Homepage = "https://tools.dhruvs.space/graphc/"
+Repository = "https://github.com/dhth/graphc"
+Issues = "https://github.com/dhth/graphc/issues"
+
 dependencies = [
     "boto3>=1.39.14",
     "neo4j>=5.28.1",
@@ -28,3 +46,9 @@ lint.select = ["I"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
