@@ -23,6 +23,7 @@ QUIT_CMDS = ["bye", "exit", "quit", ":q"]
 ON = "on"
 OFF = "off"
 
+
 def run_loop(
     driver: Driver, db_uri: str, history_file_path: Path, behaviours: RunBehaviours
 ) -> None:
@@ -86,7 +87,11 @@ def loop(
 ) -> None:
     history = QueryFileHistory(
         history_file_path,
-        strings_to_ignore=HELP_CMDS + [CLEAR_CMD] + [WRITE_CMD] + [PRINT_CMD] + QUIT_CMDS,
+        strings_to_ignore=HELP_CMDS
+        + [CLEAR_CMD]
+        + [WRITE_CMD]
+        + [PRINT_CMD]
+        + QUIT_CMDS,
     )
 
     loop_behaviours = deepcopy(behaviours)

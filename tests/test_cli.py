@@ -21,7 +21,7 @@ success: true
 exit_code: 0
 ----- stdout -----
 usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-W INTEGER]
-              [--debug] [-w] [-f {json,csv}]
+              [--debug] [-w] [-f {json,csv}] [-p]
 
 Query Neo4j/AWS Neptune databases via an interactive console
 
@@ -40,9 +40,11 @@ options:
                         Number of warmup runs before benchmarking (default: 0)
   --debug               Print runtime configuration and exit
   -w, --write           Write query results to file (or start console with
-                        write mode on)
+                        'write results' mode on)
   -f {json,csv}, --format {json,csv}
                         Output file format for query results
+  -p, --print-query     Print the query (or start console with 'print query'
+                        mode on)
 
 examples:
   # Interactive mode
@@ -369,6 +371,6 @@ exit_code: 2
 
 ----- stderr -----
 usage: graphc [-h] [-q STRING] [-d STRING] [-b] [-n INTEGER] [-W INTEGER]
-              [--debug] [-w] [-f {json,csv}]
+              [--debug] [-w] [-f {json,csv}] [-p]
 graphc: error: argument -f/--format: invalid choice: xml (choose from json, csv)
 """)
