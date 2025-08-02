@@ -13,8 +13,6 @@ via an interactive console.
 💾 Installation
 ---
 
-**uv**:
-
 ```sh
 uv tool install git+https://github.com/dhth/graphc
 ```
@@ -84,17 +82,18 @@ manner.
 | `help` / `:h`                  | show help                       |
 | `clear`                        | clear screen                    |
 | `quit` / `exit` / `bye` / `:q` | quit                            |
-| `write <FORMAT>`               | turn ON write mode              |
-| `write off`                    | turn OFF write mode             |
+| `write <FORMAT>`               | turn ON "write results" mode    |
+| `write off`                    | turn OFF "write results" mode   |
 | `@<filename>`                  | execute query from a local file |
+| `print <on/off>`               | toggle "print query" mode       |
 
 ### Keymaps
 
 | Key       | Description                                                |
 |-----------|------------------------------------------------------------|
-| `<esc>`   | to enter vim mode                                          |
-| `↑` / `k` | to scroll up in query history                              |
-| `↓` / `j` | to scroll down in query history                            |
+| `<esc>`   | enter vim mode                                             |
+| `↑` / `k` | scroll up in query history                                 |
+| `↓` / `j` | scroll down in query history                               |
 | `tab`     | cycle through path suggestions (in insert mode, after `@`) |
 
 ✏️ Write mode
