@@ -14,10 +14,14 @@ from domain import OutputFormat, RunBehaviours
 from .completions import QueryFilePathCompleter
 from .utils import get_query_from_file
 
-CLEAR_CMDS = ["clear"]
+CLEAR_CMD = "clear"
 HELP_CMDS = ["help", ":h"]
-WRITE_CMDS = ["write"]
+WRITE_CMD = "write"
+PRINT_CMD = "print"
 QUIT_CMDS = ["bye", "exit", "quit", ":q"]
+
+ON = "on"
+OFF = "off"
 
 
 def run_loop(
@@ -51,9 +55,10 @@ def print_help(db_uri: str) -> None:
   help / :h                      show help
   clear                          clear screen
   quit / exit / bye / :q         quit
-  write <FORMAT>                 turn ON write mode
-  write off                      turn OFF write mode
-  @<filename>                    execute query from a local file[/]
+  write <FORMAT>                 turn ON "write results" mode
+  write off                      turn OFF "write results" mode
+  @<filename>                    execute query from a local file
+  print <on/off>                 toggle "print query" mode[/]
 
 [green]keymaps
   <esc>                          enter vim mode
@@ -82,7 +87,11 @@ def loop(
 ) -> None:
     history = QueryFileHistory(
         history_file_path,
-        strings_to_ignore=HELP_CMDS + CLEAR_CMDS + WRITE_CMDS + QUIT_CMDS,
+        strings_to_ignore=HELP_CMDS
+        + [CLEAR_CMD]
+        + [WRITE_CMD]
+        + [PRINT_CMD]
+        + QUIT_CMDS,
     )
 
     loop_behaviours = deepcopy(behaviours)
@@ -118,12 +127,30 @@ def loop(
             print_help(db_uri)
             continue
 
-        if user_input in CLEAR_CMDS:
+        if user_input == CLEAR_CMD:
             clear_screen()
             just_cleared = True
             continue
 
-        if user_input.startswith("write"):
+        if user_input.startswith(PRINT_CMD):
+            els = user_input.split()
+            arg = els[1] if len(els) == 2 else None
+            if not (arg == OFF or arg == ON):
+                rprint(
+                    f"[red]Error[/]: incorrect command provided; correct syntax: 'print <on/off>'"
+                )
+                continue
+
+            if arg == OFF:
+                loop_behaviours.print_query = False
+                rprint(f"[yellow]print mode turned OFF[/]")
+            else:
+                loop_behaviours.print_query = True
+                rprint(f"[yellow]print mode turned ON[/]")
+
+            continue
+
+        if user_input.startswith(WRITE_CMD):
             els = user_input.split()
             if len(els) != 2:
                 rprint(
@@ -132,7 +159,7 @@ def loop(
                 continue
 
             arg = els[1]
-            if arg == "off":
+            if arg == OFF:
                 loop_behaviours.write = False
                 rprint(f"[yellow]write mode turned OFF[/]")
                 continue

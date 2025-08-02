@@ -10,8 +10,6 @@ alias t := test
 
 format *FLAGS:
     uv run ruff format . {{FLAGS}}
-
-ruff:
     uv run ruff check . --fix
 
 ty *FLAGS:

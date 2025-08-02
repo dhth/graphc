@@ -32,15 +32,21 @@ def main():
 
             if args.benchmark:
                 benchmark_query(
-                    driver, query, args.bench_num_runs, args.bench_warmup_num_runs
+                    driver,
+                    query,
+                    args.bench_num_runs,
+                    args.bench_warmup_num_runs,
+                    args.print_query,
                 )
             else:
-                behaviours = RunBehaviours(args.write, args.output_format, True)
+                behaviours = RunBehaviours(
+                    args.write, args.output_format, args.print_query
+                )
                 query_and_print_result(driver, query, behaviours)
         else:
             user_data_dir = get_data_dir()
             history_file_path = Path(user_data_dir) / "history.txt"
-            behaviours = RunBehaviours(args.write, args.output_format, False)
+            behaviours = RunBehaviours(args.write, args.output_format, args.print_query)
             run_loop(driver, db_uri, history_file_path, behaviours)
     except KeyboardInterrupt:
         sys.exit(1)
