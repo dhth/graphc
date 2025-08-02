@@ -1,9 +1,17 @@
 [project]
 name = "graphc"
-version = "0.1.1"
+version = "0.1.2"
 description = "query graph databases via an interactive console"
 readme = "README.md"
 requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.39.14",
+    "neo4j>=5.28.1",
+    "pandas>=2.3.1",
+    "platformdirs>=4.3.8",
+    "prompt-toolkit>=3.0.51",
+    "rich>=14.1.0",
+]
 license = "MIT"
 keywords = ["neo4j", "neptune", "graph", "database", "cypher", "console", "cli"]
 classifiers = [
@@ -14,20 +22,6 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Database",
     "Topic :: Utilities",
-]
-
-[urls]
-Homepage = "https://tools.dhruvs.space/graphc/"
-Repository = "https://github.com/dhth/graphc"
-Issues = "https://github.com/dhth/graphc/issues"
-
-dependencies = [
-    "boto3>=1.39.14",
-    "neo4j>=5.28.1",
-    "pandas>=2.3.1",
-    "platformdirs>=4.3.8",
-    "prompt-toolkit>=3.0.51",
-    "rich>=14.1.0",
 ]
 
 [dependency-groups]
@@ -52,3 +46,8 @@ name = "testpypi"
 url = "https://test.pypi.org/simple/"
 publish-url = "https://test.pypi.org/legacy/"
 explicit = true
+
+[project.urls]
+Homepage = "https://tools.dhruvs.space/graphc/"
+Repository = "https://github.com/dhth/graphc"
+Issues = "https://github.com/dhth/graphc/issues"
