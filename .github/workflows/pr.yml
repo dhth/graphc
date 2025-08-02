@@ -21,7 +21,10 @@ jobs:
           filters: |
             code:
               - "src/**"
-              - ".github/actions/**/*.yml"
+              - "tests/**"
+              - ".python-version"
+              - "pyproject.toml"
+              - "uv.lock"
               - ".github/workflows/pr.yml"
             workflows:
               - ".github/**/*.yml"
