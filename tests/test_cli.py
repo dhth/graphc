@@ -38,7 +38,7 @@ options:
                         Number of benchmark runs (default: 5)
   -W INTEGER, --bench-warmup-num-runs INTEGER
                         Number of warmup runs before benchmarking (default: 0)
-  --debug               Print runtime configuration and exit
+  --debug               Print debug information without doing anything
   -w, --write           Write query results to file (or start console with
                         'write results' mode on)
   -f {json,csv}, --format {json,csv}

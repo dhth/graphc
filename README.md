@@ -10,6 +10,15 @@ via an interactive console.
 
 ![console](https://tools.dhruvs.space/images/graphc/v0-1-0/console.gif)
 
+💾 Installation
+---
+
+**uv**:
+
+```sh
+uv tool install git+https://github.com/dhth/graphc
+```
+
 ⚡️ Usage
 ---
 
@@ -29,10 +38,24 @@ options:
                         Number of benchmark runs (default: 5)
   -W INTEGER, --bench-warmup-num-runs INTEGER
                         Number of warmup runs before benchmarking (default: 0)
-  --debug               Print runtime configuration and exit
-  -w, --write           Write query results to file (or start console with write mode on)
+  --debug               Print debug information without doing anything
+  -w, --write           Write query results to file (or start console with 'write results' mode on)
   -f {json,csv}, --format {json,csv}
                         Output file format for query results
+  -p, --print-query     Print the query (or start console with 'print query' mode on)
+
+examples:
+  # Interactive mode
+  DB_URI='bolt://127.0.0.1:7687' \
+      DB_USER='user' \
+      DB_PASSWORD='password' \
+      graphc
+  graphc -d 'bolt://abc.xyz.us-east-1.neptune.amazonaws.com:8182'
+
+  # One-off query mode
+  graphc --query 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5'
+  graphc -q - < query.cypher
+  echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
 ```
 
 ```bash

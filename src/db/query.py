@@ -9,7 +9,9 @@ from domain import RunBehaviours
 from utils import write_df
 
 
-def query_and_print_result(driver: Driver, query: str, behaviours: RunBehaviours):
+def query_and_print_result(
+    driver: Driver, query: str, behaviours: RunBehaviours
+) -> None:
     start = time.perf_counter()
     result = query_db(driver, query)
     took_ms = (time.perf_counter() - start) * 1000
@@ -41,7 +43,7 @@ def query_db(driver: Driver, query: str) -> pd.DataFrame:
 
 def benchmark_query(
     driver: Driver, query: str, num_runs: int, warmup_runs: int, print_query: bool
-):
+) -> None:
     def _time_one_run() -> float:
         start = time.perf_counter()
         query_db(driver, query)

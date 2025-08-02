@@ -134,13 +134,7 @@ def loop(
 
         if user_input.startswith(PRINT_CMD):
             els = user_input.split()
-            if len(els) != 2:
-                rprint(
-                    f"[red]Error[/]: incorrect command provided; correct syntax: 'print <on/off>'"
-                )
-                continue
-
-            arg = els[1]
+            arg = els[1] if len(els) == 2 else None
             if not (arg == OFF or arg == ON):
                 rprint(
                     f"[red]Error[/]: incorrect command provided; correct syntax: 'print <on/off>'"

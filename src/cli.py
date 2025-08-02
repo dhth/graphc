@@ -79,7 +79,7 @@ examples:
     parser.add_argument(
         "--debug",
         action="store_true",
-        help="Print runtime configuration and exit",
+        help="Print debug information without doing anything",
     )
 
     parser.add_argument(
