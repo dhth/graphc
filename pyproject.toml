@@ -18,7 +18,7 @@ classifiers = [
     "Topic :: Utilities",
 ]
 
-[project.urls]
+[urls]
 Homepage = "https://tools.dhruvs.space/graphc/"
 Repository = "https://github.com/dhth/graphc"
 Issues = "https://github.com/dhth/graphc/issues"
