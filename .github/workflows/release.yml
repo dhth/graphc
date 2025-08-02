@@ -1,0 +1,21 @@
+name: release
+
+on:
+  pull_request:
+
+jobs:
+  publish-to-testpypi:
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Build
+        run: uv build
+      - name: Publish to testpypi
+        env:
+          UV_PUBLISH_TOKEN: ${{secrets.TESTPYPI_TOKEN}}
+        run: |
+          uv publish --index testpypi
