@@ -14,6 +14,7 @@ class Args:
     debug: bool
     write: bool
     output_format: OutputFormat
+    print_query: bool
 
 
 def parse_args() -> Args:
@@ -85,7 +86,7 @@ examples:
         "-w",
         "--write",
         action="store_true",
-        help="Write query results to file (or start console with write mode on)",
+        help="Write query results to file (or start console with 'write results' mode on)",
     )
 
     parser.add_argument(
@@ -94,6 +95,13 @@ examples:
         choices=OutputFormat.choices(),
         default=OutputFormat.default().value,
         help="Output file format for query results",
+    )
+
+    parser.add_argument(
+        "-p",
+        "--print-query",
+        action="store_true",
+        help="Print the query (or start console with 'print query' mode on)",
     )
 
     args = parser.parse_args()
@@ -122,4 +130,5 @@ examples:
         debug=args.debug,
         write=args.write,
         output_format=output_format,
+        print_query=args.print_query,
     )
