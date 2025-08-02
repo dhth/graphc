@@ -2,6 +2,9 @@
   <h1 align="center">graphc</h1>
   <p align="center">
     <a href="https://github.com/dhth/graphc/actions/workflows/main.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/dhth/graphc/main.yml?style=flat-square"></a>
+    <a href="https://pypi.org/project/graphc/"><img alt="PYPI version" src="https://img.shields.io/pypi/v/graphc?style=flat-square"></a>
+    <a href="https://github.com/dhth/graphc/releases/latest"><img alt="Latest Release" src="https://img.shields.io/github/release/dhth/graphc.svg?style=flat-square"></a>
+    <a href="https://github.com/dhth/graphc/releases"><img alt="Commits Since Latest Release" src="https://img.shields.io/github/commits-since/dhth/graphc/latest?style=flat-square"></a>
   </p>
 </p>
 
