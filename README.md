@@ -8,7 +8,7 @@
 `graphc` (stands for "graph console") lets you query Neo4j/AWS Neptune databases
 via an interactive console.
 
-![console](https://tools.dhruvs.space/images/graphc/v0-1-0/console.gif)
+![console](https://tools.dhruvs.space/images/graphc/v0-1-0/console.png)
 
 💾 Installation
 ---
@@ -41,29 +41,22 @@ options:
   -f {json,csv}, --format {json,csv}
                         Output file format for query results
   -p, --print-query     Print the query (or start console with 'print query' mode on)
-
-examples:
-  # Interactive mode
-  DB_URI='bolt://127.0.0.1:7687' \
-      DB_USER='user' \
-      DB_PASSWORD='password' \
-      graphc
-  graphc -d 'bolt://abc.xyz.us-east-1.neptune.amazonaws.com:8182'
-
-  # One-off query mode
-  graphc --query 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5'
-  graphc -q - < query.cypher
-  echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
 ```
 
 ```bash
 # Interactive mode
-DB_URI='bolt://127.0.0.1:7687' DB_USER='user' DB_PASSWORD='password' graphc
+export DB_URI='bolt://127.0.0.1:7687'
+export DB_USER='user'
+export DB_PASSWORD='password'
+graphc
+
 graphc -d 'bolt://abc.xyz.us-east-1.neptune.amazonaws.com:8182'
 
 # One-off query mode
 graphc --query 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5'
+
 graphc -q - < query.cypher
+
 echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
 ```
 
@@ -73,7 +66,7 @@ echo 'MATCH (n: Node) RETURN n.id, n.name LIMIT 5' | graphc -q -
 `graphc` comes with a console where you can execute queries in an interactive
 manner.
 
-![console](https://tools.dhruvs.space/images/graphc/v0-1-0/console.png)
+![console](https://tools.dhruvs.space/images/graphc/v0-1-0/console.gif)
 
 ### Commands
 

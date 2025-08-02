@@ -1,7 +1,7 @@
 [project]
 name = "graphc"
 version = "0.1.0"
-description = "a console for querying graph databases"
+description = "query graph databases via an interactive console"
 requires-python = ">=3.12"
 dependencies = [
     "boto3>=1.39.14",
