@@ -64,9 +64,11 @@ This isn't supposed to happen; let [blue]{AUTHOR}[/] know via [blue]{ISSUES_URL}
 
         follow_up = error_follow_up(e)
         if follow_up:
-            print(file=sys.stderr)
             print(
-                follow_up,
+                f"""\
+---
+{follow_up}\
+""",
                 file=sys.stderr,
             )
 

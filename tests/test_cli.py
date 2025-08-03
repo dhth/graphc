@@ -304,8 +304,15 @@ Error: number of warmup runs must be >= 0
 
 def test_db_uri_requires_a_scheme(runner: Runner):
     # GIVEN
-    args = []
-    env = {"DB_URI": "127.0.0.1:9999"}
+    args = [
+        "--query",
+        "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
+    ]
+    env = {
+        "DB_URI": "127.0.0.1:9999",
+        "DB_USER": "user",
+        "DB_PASSWORD": "password",
+    }
 
     # WHEN
     result = runner(args, env)
@@ -325,8 +332,15 @@ bolt://host[:port] or neo4j://host[:port][?routing_context]
 
 def test_db_uri_scheme_needs_to_be_supported(runner: Runner):
     # GIVEN
-    args = []
-    env = {"DB_URI": "blah://127.0.0.1:9999"}
+    args = [
+        "--query",
+        "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
+    ]
+    env = {
+        "DB_URI": "blah://127.0.0.1:9999",
+        "DB_USER": "user",
+        "DB_PASSWORD": "password",
+    }
 
     # WHEN
     result = runner(args, env)
@@ -341,6 +355,55 @@ exit_code: 1
 Error: URI scheme 'blah' is not supported. Supported URI schemes are ['bolt', \n\
 'bolt+ssc', 'bolt+s', 'neo4j', 'neo4j+ssc', 'neo4j+s']. Examples: \n\
 bolt://host[:port] or neo4j://host[:port][?routing_context]
+""")
+
+
+def test_db_user_and_password_are_required_for_neo4j_database(runner: Runner):
+    # GIVEN
+    args = [
+        "--query",
+        "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
+    ]
+    env = {
+        "DB_URI": "127.0.0.1:9999",
+    }
+
+    # WHEN
+    result = runner(args, env)
+
+    # THEN
+    assert result == snapshot("""\
+success: false
+exit_code: 1
+----- stdout -----
+
+----- stderr -----
+Error: DB_USER and DB_PASSWORD need be set
+""")
+
+
+def test_aws_region_needs_to_be_set_with_a_value_for_neptune_db(runner: Runner):
+    # GIVEN
+    args = [
+        "--query",
+        "MATCH (n: Node) RETURN n.id, n.name LIMIT 5",
+    ]
+    env = {
+        "DB_URI": "bolt://blah-959b77c9.us-east-1.neptune.amazonaws.com:8182",
+        "AWS_REGION": "",
+    }
+
+    # WHEN
+    result = runner(args, env)
+
+    # THEN
+    assert result == snapshot("""\
+success: false
+exit_code: 1
+----- stdout -----
+
+----- stderr -----
+Error: AWS_REGION needs to be set
 """)
 
 
