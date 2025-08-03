@@ -1,6 +1,7 @@
 import os
 
 from boto3 import Session
+from botocore.exceptions import BotoCoreError
 from neo4j import Driver, GraphDatabase
 
 from domain import NeptuneAuth, NeptuneServiceKind
@@ -17,7 +18,7 @@ def get_db_driver(db_uri: str) -> Driver:
         session = Session()
         try:
             session.get_credentials().token
-        except Exception as e:
+        except BotoCoreError as e:
             raise AWSAuthError(f"couldn't authenticate AWS client: {e}")
 
         # TODO: add support for neptune graph
