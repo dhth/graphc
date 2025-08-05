@@ -43,6 +43,7 @@ class Console:
             + QUIT_CMDS,
         )
         self.completer = QueryFilePathCompleter()
+        self.keep_looping = True
 
     def run(self) -> None:
         self._print_banner()
@@ -50,7 +51,7 @@ class Console:
         self._loop()
 
     def _loop(self) -> None:
-        while True:
+        while self.keep_looping:
             if self.behaviours.write:
                 rprint(
                     f"[cyan]write mode ({self.behaviours.output_format.value}) is ON[/]"
@@ -68,24 +69,8 @@ class Console:
             if user_input == "":
                 continue
 
-            if user_input in QUIT_CMDS:
-                self._handle_quit()
-                return
-
-            if user_input in HELP_CMDS:
-                self._handle_help()
-                continue
-
-            if user_input == CLEAR_CMD:
-                self._handle_clear()
-                continue
-
-            if user_input.startswith(PRINT_CMD):
-                self._handle_print(user_input)
-                continue
-
-            if user_input.startswith(WRITE_CMD):
-                self._handle_write(user_input)
+            was_command = self._handle_command(user_input)
+            if was_command:
                 continue
 
             query: str
@@ -100,14 +85,29 @@ class Console:
 
             self._handle_query(query)
 
-    def _handle_quit(self) -> None:
-        print("bye 👋")
+    def _handle_command(self, user_input: str) -> bool:
+        if user_input in QUIT_CMDS:
+            print("bye 👋")
+            self.keep_looping = False
+            return True
 
-    def _handle_help(self) -> None:
-        self._print_help()
+        if user_input in HELP_CMDS:
+            self._print_help()
+            return True
 
-    def _handle_clear(self) -> None:
-        clear_screen()
+        if user_input == CLEAR_CMD:
+            clear_screen()
+            return True
+
+        if user_input.startswith(PRINT_CMD):
+            self._handle_print(user_input)
+            return True
+
+        if user_input.startswith(WRITE_CMD):
+            self._handle_write(user_input)
+            return True
+
+        return False
 
     def _handle_print(self, user_input: str) -> None:
         els = user_input.split()
