@@ -1,3 +1,3 @@
-from .loop import run_loop
+from .loop import Console
 
-__all__ = ["run_loop"]
+__all__ = ["Console"]
