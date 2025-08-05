@@ -5,7 +5,7 @@ from pathlib import Path
 from rich import print as rprint
 
 from cli import Args, parse_args
-from console import run_loop
+from console import Console
 from db import benchmark_query, get_db_driver, query_and_print_result
 from domain import RunBehaviours
 from errors import StdinIsTTYError, error_follow_up, is_error_unexpected
@@ -47,7 +47,8 @@ def main():
             user_data_dir = get_data_dir()
             history_file_path = Path(user_data_dir) / "history.txt"
             behaviours = RunBehaviours(args.write, args.output_format, args.print_query)
-            run_loop(driver, db_uri, history_file_path, behaviours)
+            console = Console(driver, db_uri, history_file_path, behaviours)
+            console.run()
     except KeyboardInterrupt:
         sys.exit(1)
     except Exception as e:
