@@ -48,7 +48,7 @@ class Console:
         self.completer = QueryFilePathCompleter()
         self.keep_looping = True
         self.last_ctrl_c_time = None
-        self.session = PromptSession(
+        self.prompt_session = PromptSession(
             history=self.history,
             vi_mode=True,
             enable_history_search=True,
@@ -69,23 +69,19 @@ class Console:
                 rprint()
 
             try:
-                user_input = self.session.prompt(">> ").strip()
+                user_input = self.prompt_session.prompt(">> ").strip()
             except KeyboardInterrupt as e:
-                buffer_text = (
-                    self.session.app.current_buffer.text if self.session.app else ""
-                )
-                buffer_empty = buffer_text.strip() == ""
+                buffer_empty = self.prompt_session.app.current_buffer.text.strip() == ""
 
-                # user was typing a query, cancel it and move on
+                # user had a query entered, cancel it and move on
                 if not buffer_empty:
                     continue
 
                 if (
                     self.last_ctrl_c_time is not None
-                    and time.time() - self.last_ctrl_c_time
-                    < float(CTRL_C_WINDOW_SECONDS)
+                    and time.time() - self.last_ctrl_c_time < CTRL_C_WINDOW_SECONDS
                 ):
-                    # prompt was empty and user pressed ctrl+c within the quit window
+                    # prompt was empty and user pressed ctrl+c within the quit window; quit
                     raise e
                 else:
                     # prompt was empty and user pressed ctrl+c either the first
