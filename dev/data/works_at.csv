@@ -1,0 +1,6 @@
+person_id,company_id,role
+1,1,Engineer
+2,1,Manager
+3,2,Analyst
+4,3,Designer
+5,2,Engineer
