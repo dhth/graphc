@@ -21,7 +21,7 @@ lint:
     uv run ty check .
 
 query query *FLAGS:
-    uv run main.py --query '{{query}}' {{FLAGS}}
+    uv run src/main.py --query '{{query}}' {{FLAGS}}
 
 run *FLAGS:
     uv run src/main.py {{FLAGS}}
@@ -37,3 +37,19 @@ test *FLAGS:
 
 review *FLAGS:
     uv run pytest -v --inline-snapshot review {{FLAGS}}
+
+[working-directory: 'dev']
+dev-up:
+    docker compose up -d
+
+dev-load-data:
+    just queryf dev/queries/01-people.cypher > /dev/null
+    just queryf dev/queries/02-companies.cypher > /dev/null
+    just queryf dev/queries/03-works-at.cypher > /dev/null
+
+dev-query:
+    just query "MATCH (p:Person)-[r:WORKS_AT]->(c:Company) RETURN p.name, r.role, c.name"
+
+[working-directory: 'dev']
+dev-down:
+    docker compose down -v
