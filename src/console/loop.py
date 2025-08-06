@@ -1,9 +1,10 @@
 import os
+import time
 from copy import deepcopy
 from pathlib import Path
 
 from neo4j import Driver
-from prompt_toolkit import prompt
+from prompt_toolkit import PromptSession
 from rich import print as rprint
 
 from db import query_and_print_result
@@ -21,6 +22,8 @@ QUIT_CMDS = ["bye", "exit", "quit", ":q"]
 
 ON = "on"
 OFF = "off"
+
+CTRL_C_WINDOW_SECONDS = 2
 
 
 class Console:
@@ -44,6 +47,13 @@ class Console:
         )
         self.completer = QueryFilePathCompleter()
         self.keep_looping = True
+        self.last_ctrl_c_time = None
+        self.session = PromptSession(
+            history=self.history,
+            vi_mode=True,
+            enable_history_search=True,
+            completer=self.completer,
+        )
 
     def run(self) -> None:
         self._print_banner()
@@ -58,13 +68,33 @@ class Console:
                 )
                 rprint()
 
-            user_input = prompt(
-                ">> ",
-                history=self.history,
-                vi_mode=True,
-                enable_history_search=True,
-                completer=self.completer,
-            ).strip()
+            try:
+                user_input = self.session.prompt(">> ").strip()
+            except KeyboardInterrupt as e:
+                buffer_text = (
+                    self.session.app.current_buffer.text if self.session.app else ""
+                )
+                buffer_empty = buffer_text.strip() == ""
+
+                # user was typing a query, cancel it and move on
+                if not buffer_empty:
+                    continue
+
+                if (
+                    self.last_ctrl_c_time is not None
+                    and time.time() - self.last_ctrl_c_time
+                    < float(CTRL_C_WINDOW_SECONDS)
+                ):
+                    # prompt was empty and user pressed ctrl+c within the quit window
+                    raise e
+                else:
+                    # prompt was empty and user pressed ctrl+c either the first
+                    # time or after the quit window passed
+                    rprint(
+                        f"[grey50]Press Ctrl-C again within {CTRL_C_WINDOW_SECONDS} seconds to quit[/]"
+                    )
+                    self.last_ctrl_c_time = time.time()
+                    continue
 
             if user_input == "":
                 continue
