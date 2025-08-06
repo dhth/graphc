@@ -3,7 +3,8 @@ import time
 from copy import deepcopy
 from pathlib import Path
 
-from neo4j import Driver
+from neo4j import Driver, unit_of_work
+from neo4j.exceptions import ServiceUnavailable
 from prompt_toolkit import PromptSession
 from rich import print as rprint
 
@@ -41,6 +42,7 @@ class Console:
             history_file_path,
             strings_to_ignore=HELP_CMDS
             + [CLEAR_CMD]
+            + [CONNECTION_CMD]
             + [WRITE_CMD]
             + [PRINT_CMD]
             + QUIT_CMDS,
@@ -125,6 +127,10 @@ class Console:
             clear_screen()
             return True
 
+        if user_input == CONNECTION_CMD:
+            self._handle_connection()
+            return True
+
         if user_input.startswith(PRINT_CMD):
             self._handle_print(user_input)
             return True
@@ -172,6 +178,22 @@ class Console:
         except Exception as e:
             rprint(f"[red]Error[/]: {e}")
 
+    def _handle_connection(self) -> None:
+        @unit_of_work(timeout=5)
+        def check_connection(tx):
+            tx.run("RETURN 1")
+
+        try:
+            with self.driver.session() as session:
+                session.execute_read(check_connection)
+            rprint(f"[green]connected to {self.db_uri}[/]")
+        except ServiceUnavailable:
+            rprint(f"[red]couldn't connect to {self.db_uri}[/]")
+        except KeyboardInterrupt:
+            rprint("\n[yellow]Connection check cancelled.[/]")
+        except Exception as e:
+            rprint(f"[red]Error[/]: {e}")
+
     def _handle_query(self, query: str) -> None:
         try:
             query_and_print_result(self.driver, query, self.behaviours)
@@ -203,6 +225,7 @@ class Console:
 [yellow]commands
   help / :h                      show help
   clear                          clear screen
+  connection                     check connection to database
   quit / exit / bye / :q         quit
   write <FORMAT>                 turn ON "write results" mode
   write off                      turn OFF "write results" mode
