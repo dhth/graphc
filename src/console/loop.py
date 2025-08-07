@@ -4,6 +4,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from neo4j import Driver
+from neo4j.exceptions import ServiceUnavailable
 from prompt_toolkit import PromptSession
 from rich import print as rprint
 
@@ -15,6 +16,7 @@ from .history import QueryFileHistory
 from .utils import get_query_from_file
 
 CLEAR_CMD = "clear"
+CONNECTION_CMD = "connection"
 HELP_CMDS = ["help", ":h"]
 WRITE_CMD = "write"
 PRINT_CMD = "print"
@@ -41,6 +43,7 @@ class Console:
             history_file_path,
             strings_to_ignore=HELP_CMDS
             + [CLEAR_CMD]
+            + [CONNECTION_CMD]
             + [WRITE_CMD]
             + [PRINT_CMD]
             + QUIT_CMDS,
@@ -57,6 +60,9 @@ class Console:
 
     def run(self) -> None:
         self._print_banner()
+        rprint(f"""\
+[blue]connected to {self.db_uri}[/]
+""")
         self._print_help()
         self._loop()
 
@@ -125,6 +131,10 @@ class Console:
             clear_screen()
             return True
 
+        if user_input == CONNECTION_CMD:
+            self._handle_conn_check()
+            return True
+
         if user_input.startswith(PRINT_CMD):
             self._handle_print(user_input)
             return True
@@ -172,6 +182,17 @@ class Console:
         except Exception as e:
             rprint(f"[red]Error[/]: {e}")
 
+    def _handle_conn_check(self) -> None:
+        try:
+            self.driver.verify_connectivity()
+            rprint(f"[green]connected to {self.db_uri}[/]")
+        except ServiceUnavailable:
+            rprint(f"[red]couldn't connect to {self.db_uri}[/]")
+        except KeyboardInterrupt:
+            rprint("[yellow]connection check cancelled[/]")
+        except Exception as e:
+            rprint(f"[red]Error[/]: {e}")
+
     def _handle_query(self, query: str) -> None:
         try:
             query_and_print_result(self.driver, query, self.behaviours)
@@ -198,11 +219,10 @@ class Console:
 
     def _print_help(self) -> None:
         help_text = f"""\
-[blue]connected to {self.db_uri}[/]
-
 [yellow]commands
   help / :h                      show help
   clear                          clear screen
+  connection                     check connection status
   quit / exit / bye / :q         quit
   write <FORMAT>                 turn ON "write results" mode
   write off                      turn OFF "write results" mode

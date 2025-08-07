@@ -29,7 +29,13 @@ def get_db_driver(db_uri: str) -> Driver:
             service=NeptuneServiceKind.DB,
         )
 
-        return GraphDatabase.driver(db_uri, auth=auth, encrypted=True)
+        return GraphDatabase.driver(
+            db_uri,
+            auth=auth,
+            encrypted=True,
+            connection_timeout=5,
+            connection_acquisition_timeout=5,
+        )
     else:
         user_name = os.environ.get("DB_USER")
         password = os.environ.get("DB_PASSWORD")
