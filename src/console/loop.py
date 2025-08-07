@@ -60,6 +60,9 @@ class Console:
 
     def run(self) -> None:
         self._print_banner()
+        rprint(f"""\
+[blue]connected to {self.db_uri}[/]
+""")
         self._print_help()
         self._loop()
 
@@ -216,8 +219,6 @@ class Console:
 
     def _print_help(self) -> None:
         help_text = f"""\
-[blue]connected to {self.db_uri}[/]
-
 [yellow]commands
   help / :h                      show help
   clear                          clear screen
