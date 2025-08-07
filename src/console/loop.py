@@ -3,7 +3,7 @@ import time
 from copy import deepcopy
 from pathlib import Path
 
-from neo4j import Driver, unit_of_work
+from neo4j import Driver
 from neo4j.exceptions import ServiceUnavailable
 from prompt_toolkit import PromptSession
 from rich import print as rprint
@@ -16,6 +16,7 @@ from .history import QueryFileHistory
 from .utils import get_query_from_file
 
 CLEAR_CMD = "clear"
+CONNECTION_CMD = "connection"
 HELP_CMDS = ["help", ":h"]
 WRITE_CMD = "write"
 PRINT_CMD = "print"
@@ -128,7 +129,7 @@ class Console:
             return True
 
         if user_input == CONNECTION_CMD:
-            self._handle_connection()
+            self._handle_conn_check()
             return True
 
         if user_input.startswith(PRINT_CMD):
@@ -178,19 +179,14 @@ class Console:
         except Exception as e:
             rprint(f"[red]Error[/]: {e}")
 
-    def _handle_connection(self) -> None:
-        @unit_of_work(timeout=5)
-        def check_connection(tx):
-            tx.run("RETURN 1")
-
+    def _handle_conn_check(self) -> None:
         try:
-            with self.driver.session() as session:
-                session.execute_read(check_connection)
+            self.driver.verify_connectivity()
             rprint(f"[green]connected to {self.db_uri}[/]")
         except ServiceUnavailable:
             rprint(f"[red]couldn't connect to {self.db_uri}[/]")
         except KeyboardInterrupt:
-            rprint("\n[yellow]Connection check cancelled.[/]")
+            rprint("[yellow]connection check cancelled[/]")
         except Exception as e:
             rprint(f"[red]Error[/]: {e}")
 
@@ -225,7 +221,7 @@ class Console:
 [yellow]commands
   help / :h                      show help
   clear                          clear screen
-  connection                     check connection to database
+  connection                     check connection status
   quit / exit / bye / :q         quit
   write <FORMAT>                 turn ON "write results" mode
   write off                      turn OFF "write results" mode
