@@ -107,7 +107,7 @@ wheels = [
 
 [[package]]
 name = "inline-snapshot"
-version = "0.27.1"
+version = "0.27.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asttokens" },
@@ -115,9 +115,9 @@ dependencies = [
     { name = "pytest" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/29/56/20b7a5e94db1596430e92a1249f22810931cc9f6de01fee44665fc5bc137/inline_snapshot-0.27.1.tar.gz", hash = "sha256:44fdc960431032df5d215d5c6489e2c3e4c86d7de1c8860d777e890980d15e01", size = 345865, upload-time = "2025-08-08T17:36:01.742Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b9/93/3caece250cdf267fcb39e6a82ada0e7e8e8fb37207331309dbf6865d7497/inline_snapshot-0.27.2.tar.gz", hash = "sha256:5ecc7ccfdcbf8d9273d3fa9fb55b829720680ef51bb1db12795fd1b0f4a3783c", size = 347133, upload-time = "2025-08-11T07:49:55.134Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3d/1e/fcbc7e748d699f246bc8e1f198d916a57db543a2da95e8c00250b373729c/inline_snapshot-0.27.1-py3-none-any.whl", hash = "sha256:e989fdcc10626ca89727c6d88c1c71456cb10df577bb8c131191eb17f2e81a1e", size = 66903, upload-time = "2025-08-08T17:36:00.114Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/7f/9e41fd793827af8cbe812fff625d62b3b47603d62145b718307ef4e381eb/inline_snapshot-0.27.2-py3-none-any.whl", hash = "sha256:7c11f78ad560669bccd38d6d3aa3ef33d6a8618d53bd959019dca3a452272b7e", size = 68004, upload-time = "2025-08-11T07:49:53.904Z" },
 ]
 
 [[package]]
