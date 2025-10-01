@@ -152,14 +152,14 @@ wheels = [
 
 [[package]]
 name = "neo4j"
-version = "5.28.2"
+version = "6.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytz" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/50/69/4862fabc082f2447131aada5c91736155349d77ebf443af7f59553b7b789/neo4j-5.28.2.tar.gz", hash = "sha256:7d38e27e4f987a45cc9052500c6ee27325cb23dae6509037fe31dd7ddaed70c7", size = 231874, upload-time = "2025-07-30T06:04:34.669Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7a/8f/22ddbaf7928e9ab7f20581fe10c616db0832a6bbb06ba3f9e0d4e32721dc/neo4j-6.0.0.tar.gz", hash = "sha256:d49bbf0d5047fbfa495da7fc62e869e728e29bebb01140ec32ac0c1aeb56b9db", size = 239954, upload-time = "2025-09-30T11:23:49.1Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/04/00/1f74089c06aec1fac9390e2300a6a6b2381e0dac281783d64ccca9d681fd/neo4j-5.28.2-py3-none-any.whl", hash = "sha256:5c53b5c3eee6dee7e920c9724391aa38d7135a651e71b766da00533b92a91a94", size = 313156, upload-time = "2025-07-30T06:04:31.438Z" },
+    { url = "https://files.pythonhosted.org/packages/96/de/51209c1d47bc4b2384d9e698d4f8a23eb0f24417312e067185f9e2ed12b2/neo4j-6.0.0-py3-none-any.whl", hash = "sha256:708bf2ad34d470fe56f7e8d27164d5a44c6aa9345de28f0356c83040dd75e0f4", size = 325612, upload-time = "2025-09-30T11:23:47.082Z" },
 ]
 
 [[package]]
