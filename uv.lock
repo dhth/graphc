@@ -115,17 +115,18 @@ wheels = [
 
 [[package]]
 name = "inline-snapshot"
-version = "0.31.1"
+version = "0.32.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asttokens" },
     { name = "executing" },
     { name = "pytest" },
     { name = "rich" },
+    { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1c/b1/52b5ee59f73ed31d5fe21b10881bf2d121d07d54b23c0b6b74186792e620/inline_snapshot-0.31.1.tar.gz", hash = "sha256:4ea5ed70aa1d652713bbfd750606b94bd8a42483f7d3680433b3e92994495f64", size = 2606338, upload-time = "2025-11-07T07:36:18.932Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ca/87/62b78b49042c533038ab1bf0931a7b70fdb78d07a11c9bf159be04027df8/inline_snapshot-0.32.5.tar.gz", hash = "sha256:5025074eab5c82a88504975e2655beeb5e96fd57ed2d9ebb38538473748f2065", size = 2626796, upload-time = "2026-03-13T18:35:54.891Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ba/52/945db420380efbda8c69a7a4a16c53df9d7ac50d8217286b9d41e5d825ff/inline_snapshot-0.31.1-py3-none-any.whl", hash = "sha256:7875a73c986a03388c7e758fb5cb8a43d2c3a20328aa1d851bfb4ed536c4496f", size = 71965, upload-time = "2025-11-07T07:36:16.836Z" },
+    { url = "https://files.pythonhosted.org/packages/09/d3/73426dd3da75095fd071ce5c1f8e520e879a582ca04df861575c6feb9166/inline_snapshot-0.32.5-py3-none-any.whl", hash = "sha256:ac617c273e811ed5ca15abd8f8dbd3fa268296bb0642ccb1403a5df61ce2e39e", size = 84993, upload-time = "2026-03-13T18:35:52.955Z" },
 ]
 
 [[package]]
@@ -524,6 +525,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/3d/18/caee33d1ce9dd50bd94c26cde7cda4f6971e22e474e7d72a5c86d745ad58/ty-0.0.19-py3-none-win32.whl", hash = "sha256:19b33df3aa7af7b1a9eaa4e1175c3b4dec0f5f2e140243e3492c8355c37418f3", size = 9677215, upload-time = "2026-02-26T12:13:08.519Z" },
     { url = "https://files.pythonhosted.org/packages/81/41/18fc0771d0b1da7d7cc2fc9af278d3122b754fe8b521a748734f4e16ecfd/ty-0.0.19-py3-none-win_amd64.whl", hash = "sha256:b9052c61464cdd76bc8e6796f2588c08700f25d0dcbc225bb165e390ea9d96a4", size = 10651252, upload-time = "2026-02-26T12:13:13.035Z" },
     { url = "https://files.pythonhosted.org/packages/8b/8c/26f7ce8863eb54510082747b3dfb1046ba24f16fc11de18c0e5feb36ff18/ty-0.0.19-py3-none-win_arm64.whl", hash = "sha256:9329804b66dcbae8e7af916ef4963221ed53b8ec7d09b0793591c5ae8a0f3270", size = 10093195, upload-time = "2026-02-26T12:13:26.816Z" },
+]
+
+[[package]]
+name = "typing-extensions"
+version = "4.15.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466", size = 109391, upload-time = "2025-08-25T13:49:26.313Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/18/67/36e9267722cc04a6b9f15c7f3441c2363321a3ea07da7ae0c0707beb2a9c/typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548", size = 44614, upload-time = "2025-08-25T13:49:24.86Z" },
 ]
 
 [[package]]
