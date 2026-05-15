@@ -8,6 +8,10 @@
   </p>
 </p>
 
+> [!NOTE]
+> [grafq](https://github.com/dhth/grafq) is the Rust port of `graphc` and is the
+> recommended replacement going forward. Prefer it over `graphc`.
+
 `graphc` (stands for "graph console") lets you query Neo4j/AWS Neptune databases
 via an interactive console.
 
